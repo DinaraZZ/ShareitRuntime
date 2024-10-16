@@ -1,13 +1,16 @@
-package com.practice.shareitzeinolla.item;
+package com.practice.shareitzeinolla.item.dto;
 
 import com.practice.shareitzeinolla.user.User;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 @Data
-public class Item {
-    private int id;
+public class ItemUpdateDto {
     private String name;
+
     private String description;
+
     private Boolean available;
+
     private User owner;
 }

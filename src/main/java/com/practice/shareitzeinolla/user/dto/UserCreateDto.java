@@ -7,7 +7,7 @@ import lombok.Data;
 
 @Data
 public class UserCreateDto {
-    @NotBlank(message = "Имя пользователя не модет быть пустым")
+    @NotBlank(message = "Имя пользователя не может быть пустым")
     private String name;
 
     @NotNull(message = "Почта пользователя не может быть пустой")
