@@ -15,6 +15,7 @@ import java.util.Optional;
 public class ItemService {
     private final ItemRepository itemRepository;
     private final ItemMapper itemMapper;
+    // todo
     private final UserService userService;
 
     public Item create(Item item, int userId) {
@@ -30,9 +31,13 @@ public class ItemService {
 
         Item existingItem = itemRepository.findById(itemId)
                 .orElseThrow(() -> new NotFoundException("Товар не найден."));
+
+        if (user != existingItem.getOwner()) {
+            throw new NotFoundException("");
+        }
         itemMapper.merge(existingItem, updatedItem);
 
-        return itemRepository.update(updatedItem, itemId);
+        return itemRepository.update(existingItem, itemId);
     }
 
     public Item findById(int itemId) {

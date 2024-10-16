@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -21,10 +22,12 @@ public class UserService {
     }
 
     public User update(User user, int userId) {
-//        checkEmail(user);
 
         User existingUser = userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException("Пользователь не найден."));
+
+        user.setId(userId);
+        checkEmail(user);
         userMapper.merge(existingUser, user);
         return userRepository.update(existingUser, userId);
     }
@@ -43,11 +46,16 @@ public class UserService {
     }
 
     private void checkEmail(User user) {
-        List<String> usersEmails = findAll().stream()
-                .map(User::getEmail)
-                .toList();
-        if (usersEmails.contains(user.getEmail())) {
-            throw new UserExistsException("Пользователь с данной почтой уже существует");
+        if (user.getEmail() == null) {
+            return;
+        }
+        Optional<User> optional = findAll().stream()
+                .filter(u -> u.getEmail().equals(user.getEmail()))
+                .findAny();
+        if (optional.isPresent()) {
+            if (optional.get().getId() != user.getId()) {
+                throw new UserExistsException("Пользователь с данной почтой уже существует");
+            }
         }
     }
 }
