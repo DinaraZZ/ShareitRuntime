@@ -38,6 +38,13 @@ public class ItemRepositoryImpl implements ItemRepository {
     }
 
     @Override
+    public List<Item> findAll(int userId) {
+        return items.values().stream()
+                .filter(item -> item.getOwner().getId() == userId)
+                .toList();
+    }
+
+    @Override
     public void deleteById(int itemId) {
         items.remove(itemId);
     }

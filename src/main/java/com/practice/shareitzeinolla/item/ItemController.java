@@ -55,10 +55,11 @@ public class ItemController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public Collection<ItemResponseDto> findAll() {
+    public Collection<ItemResponseDto> findAll(
+            @RequestHeader(name = USER_HEADER) int userId) {
         log.debug("Получен запрос GET /items");
 
-        return itemService.findAll().stream()
+        return itemService.findAll(userId).stream()
                 .map(itemMapper::toResponse)
                 .toList();
     }
@@ -69,6 +70,15 @@ public class ItemController {
         log.debug("Получен запрос DELETE /items/{}", id);
 
         itemService.deleteById(id);
+    }
 
+    @GetMapping("/search")
+    @ResponseStatus(HttpStatus.OK)
+    public Collection<ItemResponseDto> search(@RequestParam String text) {
+        log.debug("Получен запрос GET /search?text=", text);
+
+        return itemService.search(text).stream()
+                .map(itemMapper::toResponse)
+                .toList();
     }
 }

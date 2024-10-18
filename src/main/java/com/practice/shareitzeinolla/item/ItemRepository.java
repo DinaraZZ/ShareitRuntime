@@ -12,5 +12,7 @@ public interface ItemRepository {
 
     List<Item> findAll();
 
+    List<Item> findAll(int userId);
+
     void deleteById(int itemId);
 }
