@@ -10,9 +10,9 @@ import java.time.LocalDateTime;
 @Data
 public class BookingResponseDto {
     private Long id;
-    private User user;
+    private User booker;
     private Item item;
     private BookingStatus status;
-    private LocalDateTime fromDate;
-    private LocalDateTime toDate;
+    private LocalDateTime start;
+    private LocalDateTime end;
 }

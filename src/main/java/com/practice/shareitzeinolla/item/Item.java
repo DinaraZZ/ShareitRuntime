@@ -30,4 +30,11 @@ public class Item {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
+
+    public Item(Long id) {
+        this.id = id;
+    }
+
+    public Item() {
+    }
 }

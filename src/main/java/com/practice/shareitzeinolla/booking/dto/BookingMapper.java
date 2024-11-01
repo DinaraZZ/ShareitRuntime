@@ -2,17 +2,16 @@ package com.practice.shareitzeinolla.booking.dto;
 
 import com.practice.shareitzeinolla.booking.Booking;
 import com.practice.shareitzeinolla.exception.ValidationException;
+import com.practice.shareitzeinolla.item.Item;
 import org.springframework.stereotype.Component;
 
 @Component
 public class BookingMapper {
     public Booking fromBookingCreate(BookingCreateDto bookingCreateDto) {
         Booking booking = new Booking();
-        booking.setUser(bookingCreateDto.getUser());
-        booking.setItem(bookingCreateDto.getItem());
-        booking.setStatus(bookingCreateDto.getStatus());
-        booking.setFromDate(bookingCreateDto.getFromDate());
-        booking.setToDate(bookingCreateDto.getToDate());
+        booking.setItem(new Item(bookingCreateDto.getItemId()));
+        booking.setFromDate(bookingCreateDto.getStart());
+        booking.setToDate(bookingCreateDto.getEnd());
         return booking;
     }
 
@@ -29,11 +28,11 @@ public class BookingMapper {
     public BookingResponseDto toResponse(Booking booking) {
         BookingResponseDto responseDto = new BookingResponseDto();
         responseDto.setId(booking.getId());
-        responseDto.setUser(booking.getUser());
+        responseDto.setBooker(booking.getUser());
         responseDto.setItem(booking.getItem());
         responseDto.setStatus(booking.getStatus());
-        responseDto.setFromDate(booking.getFromDate());
-        responseDto.setToDate(booking.getToDate());
+        responseDto.setStart(booking.getFromDate());
+        responseDto.setEnd(booking.getToDate());
         return responseDto;
     }
 

@@ -12,17 +12,15 @@ import java.time.LocalDateTime;
 
 @Data
 public class BookingCreateDto {
-    private User user;
 
-//    @NotNull(message = "Товар не может быть пустым.")
-    private Item item;
-    private BookingStatus status;
+    @NotNull(message = "Товар не может быть пустым.")
+    private Long itemId;
 
 //    @NotNull(message = "Дата начала бронирования не может быть пустой")
     @FutureOrPresent(message = "Дата начала бронирования не может быть в прошлом")
-    private LocalDateTime fromDate;
+    private LocalDateTime start;
 
 //    @NotNull(message = "Дата окончания бронирования не может быть пустой")
     @Future(message = "Дата окончания бронирования может быть только в будущем")
-    private LocalDateTime toDate;
+    private LocalDateTime end;
 }

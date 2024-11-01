@@ -25,12 +25,13 @@ public class BookingJpaService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException("Пользователь не найден"));
 
-        if (booking.getItem() == null) { // ?
+   /*     if (booking.getItem() == null) { // ?
             throw new ValidationException("Товар не может быть пустым");
-        }
+        }*/
 
         Item item = itemRepository.findById(booking.getItem().getId())
                 .orElseThrow(() -> new NotFoundException("Товар не найден"));
+        booking.setItem(item);
 
         if (!item.getAvailable()) {
             throw new ValidationException("Товар недоступен.");
@@ -54,15 +55,16 @@ public class BookingJpaService {
     }
 
     public Booking update(Long bookingId, Long userId, Boolean approved) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new NotFoundException("Пользователь не найден"));
 
         Booking booking = bookingRepository.findById(bookingId)
                 .orElseThrow(() -> new NotFoundException("Бронирование не найдено."));
 
-        if (!booking.getItem().getUser().equals(user)) {
+        if (!booking.getItem().getUser().getId().equals(userId)) {
             throw new ValidationException("Менять статус брони может только владелец товара.");
         }
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new NotFoundException("Пользователь не найден"));
 
         if (approved) {
             booking.setStatus(BookingStatus.APPROVED);
