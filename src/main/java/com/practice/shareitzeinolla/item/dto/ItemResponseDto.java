@@ -5,9 +5,9 @@ import lombok.Data;
 
 @Data
 public class ItemResponseDto {
-    private int id;
+    private Long id;
     private String name;
     private String description;
     private Boolean available;
-    private User owner;
+    private User user;
 }

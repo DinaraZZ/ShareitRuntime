@@ -1,4 +1,3 @@
-/*
 package com.practice.shareitzeinolla.user;
 
 import com.practice.shareitzeinolla.exception.NotFoundException;
@@ -12,17 +11,18 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class UserService {
-    private final UserRepository userRepository;
+public class UserJpaService {
+    private final UserJpaRepository userRepository;
     private final UserMapper userMapper;
 
     public User create(User user) {
         checkEmail(user);
 
-        return userRepository.create(user);
+        userRepository.save(user);
+        return user;
     }
 
-    public User update(User user, int userId) {
+    public User update(User user, Long userId) {
 
         User existingUser = userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException("Пользователь не найден."));
@@ -30,10 +30,12 @@ public class UserService {
         user.setId(userId);
         checkEmail(user);
         userMapper.merge(existingUser, user);
-        return userRepository.update(existingUser, userId);
+        userRepository.save(existingUser);
+
+        return existingUser;
     }
 
-    public User findById(int userId) {
+    public User findById(Long userId) {
         return userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException("Пользователь не найден."));
     }
@@ -42,7 +44,7 @@ public class UserService {
         return userRepository.findAll();
     }
 
-    public void deleteById(int userId) {
+    public void deleteById(Long userId) {
         userRepository.deleteById(userId);
     }
 
@@ -60,4 +62,3 @@ public class UserService {
         }
     }
 }
-*/

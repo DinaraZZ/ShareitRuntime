@@ -20,12 +20,13 @@ import static com.practice.shareitzeinolla.util.RequestConstants.USER_HEADER;
 @RequiredArgsConstructor
 public class ItemController {
     private static final Logger log = LoggerFactory.getLogger(ItemController.class);
-    private final ItemService itemService;
+//    private final ItemService itemService;
+    private final ItemJpaService itemService;
     private final ItemMapper itemMapper;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ItemResponseDto create(@RequestHeader(name = USER_HEADER) int userId,
+    public ItemResponseDto create(@RequestHeader(name = USER_HEADER) Long userId,
                                   @Valid @RequestBody ItemCreateDto item) {
         log.debug("Получен запрос POST userId: {}, /items: {}", userId, item);
 
@@ -35,9 +36,9 @@ public class ItemController {
 
     @PatchMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public ItemResponseDto update(@RequestHeader(name = USER_HEADER) int userId,
+    public ItemResponseDto update(@RequestHeader(name = USER_HEADER) Long userId,
                                   @Valid @RequestBody ItemUpdateDto item,
-                                  @PathVariable int id) {
+                                  @PathVariable Long id) {
         log.debug("Получен запрос PATCH userId: {}, /items/{}: {}", userId, id, item);
 
         return itemMapper.toResponse(
@@ -46,7 +47,7 @@ public class ItemController {
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public ItemResponseDto findById(@PathVariable int id) {
+    public ItemResponseDto findById(@PathVariable Long id) {
         log.debug("Получен запрос GET /items/{}", id);
 
         return itemMapper.toResponse(
@@ -56,7 +57,7 @@ public class ItemController {
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public Collection<ItemResponseDto> findAll(
-            @RequestHeader(name = USER_HEADER) int userId) {
+            @RequestHeader(name = USER_HEADER) Long userId) {
         log.debug("Получен запрос GET /items");
 
         return itemService.findAll(userId).stream()
@@ -66,7 +67,7 @@ public class ItemController {
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public void deleteById(@PathVariable int id) {
+    public void deleteById(@PathVariable Long id) {
         log.debug("Получен запрос DELETE /items/{}", id);
 
         itemService.deleteById(id);

@@ -1,3 +1,4 @@
+/*
 package com.practice.shareitzeinolla.user;
 
 import org.springframework.stereotype.Component;
@@ -40,3 +41,4 @@ public class UserRepositoryImpl implements UserRepository {
         users.remove(userId);
     }
 }
+*/

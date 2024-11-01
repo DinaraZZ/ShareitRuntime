@@ -1,3 +1,4 @@
+/*
 package com.practice.shareitzeinolla.item;
 
 import lombok.RequiredArgsConstructor;
@@ -49,3 +50,4 @@ public class ItemRepositoryImpl implements ItemRepository {
         items.remove(itemId);
     }
 }
+*/

@@ -22,7 +22,8 @@ public class UserController {
     private static final Logger log = LoggerFactory.getLogger(UserController.class);
 
     // patch - может поступить только одно имя, либо имейл - частичное обновление
-    private final UserService userService;
+//    private final UserService userService;
+    private final UserJpaService userService;
     private final UserMapper userMapper;
 
     @PostMapping
@@ -37,7 +38,7 @@ public class UserController {
     @PatchMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public UserResponseDto update(@Valid @RequestBody UserUpdateDto user,
-                                  @PathVariable int id) {
+                                  @PathVariable Long id) {
         log.debug("Получен запрос PATCH /users/{}: {}", id, user);
 
         return userMapper.toResponse(
@@ -46,7 +47,7 @@ public class UserController {
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public UserResponseDto findById(@PathVariable int id) {
+    public UserResponseDto findById(@PathVariable Long id) {
         log.debug("Получен запрос GET /users/{}", id);
 
         return userMapper.toResponse(
@@ -65,7 +66,7 @@ public class UserController {
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public void deleteById(@PathVariable int id) {
+    public void deleteById(@PathVariable Long id) {
         log.debug("Получен запрос DELETE /users/{}", id);
 
         userService.deleteById(id);

@@ -11,7 +11,7 @@ public class ItemMapper {
         item.setName(itemCreateDto.getName());
         item.setDescription(itemCreateDto.getDescription());
         item.setAvailable(itemCreateDto.getAvailable());
-        item.setOwner(itemCreateDto.getOwner());
+        item.setUser(itemCreateDto.getUser());
         return item;
     }
 
@@ -20,7 +20,7 @@ public class ItemMapper {
         item.setName(itemUpdateDto.getName());
         item.setDescription(itemUpdateDto.getDescription());
         item.setAvailable(itemUpdateDto.getAvailable());
-        item.setOwner(itemUpdateDto.getOwner());
+        item.setUser(itemUpdateDto.getUser());
         return item;
     }
 
@@ -30,13 +30,13 @@ public class ItemMapper {
         itemResponseDto.setName(item.getName());
         itemResponseDto.setDescription(item.getDescription());
         itemResponseDto.setAvailable(item.getAvailable());
-        itemResponseDto.setOwner(item.getOwner());
+        itemResponseDto.setUser(item.getUser());
         return itemResponseDto;
     }
 
     public void merge(Item existingItem, Item updatedItem) {
         if (updatedItem.getName() == null && updatedItem.getDescription() == null &&
-        updatedItem.getAvailable() == null && updatedItem.getOwner() == null) {
+        updatedItem.getAvailable() == null && updatedItem.getUser() == null) {
             throw new ValidationException("Все поля не могут быть пустыми.");
         }
         if (updatedItem.getName() != null) {
@@ -48,8 +48,8 @@ public class ItemMapper {
         if (updatedItem.getAvailable() != null) {
             existingItem.setAvailable(updatedItem.getAvailable());
         }
-        if (updatedItem.getOwner() != null) {
-            existingItem.setOwner(updatedItem.getOwner());
+        if (updatedItem.getUser() != null) {
+            existingItem.setUser(updatedItem.getUser());
         }
     }
 }

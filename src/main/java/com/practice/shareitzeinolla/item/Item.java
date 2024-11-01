@@ -1,13 +1,33 @@
 package com.practice.shareitzeinolla.item;
 
+import com.practice.shareitzeinolla.booking.Booking;
 import com.practice.shareitzeinolla.user.User;
-import lombok.Data;
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+import java.util.List;
+
+@Getter
+@Setter
+@Entity
+@Table(name = "items")
 public class Item {
-    private int id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private Long id;
+
+    @Column(name = "name")
     private String name;
+
+    @Column(name = "description")
     private String description;
+
+    @Column(name = "available")
     private Boolean available;
-    private User owner;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 }

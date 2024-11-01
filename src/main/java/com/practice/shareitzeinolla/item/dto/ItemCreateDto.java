@@ -16,5 +16,5 @@ public class ItemCreateDto {
     @NotNull(message = "Доступность товара не может быть пустой")
     private Boolean available;
 
-    private User owner;
+    private User user;
 }

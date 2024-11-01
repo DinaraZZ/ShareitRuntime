@@ -1,10 +1,9 @@
-/*
 package com.practice.shareitzeinolla.item;
 
 import com.practice.shareitzeinolla.exception.NotFoundException;
 import com.practice.shareitzeinolla.item.dto.ItemMapper;
 import com.practice.shareitzeinolla.user.User;
-import com.practice.shareitzeinolla.user.UserRepository;
+import com.practice.shareitzeinolla.user.UserJpaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -13,45 +12,48 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class ItemService {
-    private final ItemRepository itemRepository;
+public class ItemJpaService {
+    private final ItemJpaRepository itemRepository;
     private final ItemMapper itemMapper;
-    private final UserRepository userRepository;
+    private final UserJpaRepository userRepository;
 
-    public Item create(Item item, int userId) {
+    public Item create(Item item, Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException("Пользователь не найден"));
-        item.setOwner(user);
+        item.setUser(user);
 
-        return itemRepository.create(item);
+        itemRepository.save(item);
+        return item;
     }
 
-    public Item update(Item updatedItem, int itemId, int userId) {
+    public Item update(Item updatedItem, Long itemId, Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException("Пользователь не найден"));
-        updatedItem.setOwner(user);
+        updatedItem.setUser(user);
 
         Item existingItem = itemRepository.findById(itemId)
                 .orElseThrow(() -> new NotFoundException("Товар не найден."));
 
-        if (user != existingItem.getOwner()) {
+        if (user != existingItem.getUser()) {
             throw new NotFoundException("");
         }
         itemMapper.merge(existingItem, updatedItem);
 
-        return itemRepository.update(existingItem, itemId);
+        itemRepository.save(existingItem);
+
+        return existingItem;
     }
 
-    public Item findById(int itemId) {
+    public Item findById(Long itemId) {
         return itemRepository.findById(itemId)
                 .orElseThrow(() -> new NotFoundException("Товар не найден."));
     }
 
-    public List<Item> findAll(int userId) {
-        return itemRepository.findAll(userId);
+    public List<Item> findAll(Long userId) {
+        return itemRepository.findAllByUserId(userId);
     }
 
-    public void deleteById(int itemId) {
+    public void deleteById(Long itemId) {
         itemRepository.deleteById(itemId);
     }
 
@@ -65,4 +67,3 @@ public class ItemService {
                 .toList();
     }
 }
-*/

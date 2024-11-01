@@ -1,3 +1,4 @@
+/*
 package com.practice.shareitzeinolla.item;
 
 import java.util.List;
@@ -16,3 +17,4 @@ public interface ItemRepository {
 
     void deleteById(int itemId);
 }
+*/
