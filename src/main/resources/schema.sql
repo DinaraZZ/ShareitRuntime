@@ -1,6 +1,7 @@
 drop table if exists bookings;
 drop table if exists comments;
 drop table if exists items;
+-- DROP TABLE IF EXISTS users CASCADE;
 drop table if exists users;
 
 create table if not exists users
