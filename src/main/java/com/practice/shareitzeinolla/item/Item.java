@@ -1,6 +1,7 @@
 package com.practice.shareitzeinolla.item;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.practice.shareitzeinolla.request.Request;
 import com.practice.shareitzeinolla.user.User;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -31,6 +32,10 @@ public class Item {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "request_id")
+    private Request request;
 
     @OneToMany(mappedBy = "item")
     @JsonIgnore

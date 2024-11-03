@@ -44,6 +44,10 @@ public class ItemMapper {
                 bookingRepository.findLastBooking(item.getId(), LocalDateTime.now())
                         .orElse(null));*/
 
+        if (item.getRequest() != null) {
+            itemResponseDto.setRequestId(item.getRequest().getId());
+        }
+
         return itemResponseDto;
     }
 

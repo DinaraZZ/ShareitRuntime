@@ -1,6 +1,7 @@
 drop table if exists bookings;
 drop table if exists comments;
 drop table if exists items;
+drop table if exists requests;
 -- DROP TABLE IF EXISTS users CASCADE;
 drop table if exists users;
 
@@ -12,6 +13,16 @@ create table if not exists users
     primary key (id)
 );
 
+create table if not exists requests
+(
+    id          serial8,
+    user_id     int8      not null,
+    description varchar   not null,
+    created     timestamp not null,
+    primary key (id),
+    foreign key (user_id) references users (id)
+);
+
 create table if not exists items
 (
     id          serial8,
@@ -19,8 +30,10 @@ create table if not exists items
     description varchar not null,
     available   boolean not null,
     user_id     int8    not null,
+    request_id int8,
     primary key (id),
-    foreign key (user_id) references users (id)
+    foreign key (user_id) references users (id),
+    foreign key (request_id) references requests (id)
 );
 
 create table if not exists bookings
