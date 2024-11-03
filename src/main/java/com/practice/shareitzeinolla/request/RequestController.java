@@ -42,4 +42,12 @@ public class RequestController {
                 .map(requestMapper::toResponse)
                 .toList();
     }
+
+    @GetMapping("/{requestId}")
+    @ResponseStatus(HttpStatus.OK)
+    public RequestResponseDto findById(@PathVariable Long requestId) {
+        log.debug("Получен запрос GET /requests/{}", requestId);
+        return requestMapper.toResponse(
+                requestService.findById(requestId));
+    }
 }

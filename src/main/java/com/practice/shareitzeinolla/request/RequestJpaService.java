@@ -27,7 +27,12 @@ public class RequestJpaService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException("Пользователь не найден"));
 
-        List<Request> requests = requestRepository.findAllByUserId(userId);
+        List<Request> requests = requestRepository.findAllByUserIdOrderByCreatedDesc(userId);
         return requests;
+    }
+
+    public Request findById(Long requestId) {
+        return requestRepository.findById(requestId)
+                .orElseThrow(() -> new NotFoundException("Запрос не найден"));
     }
 }
