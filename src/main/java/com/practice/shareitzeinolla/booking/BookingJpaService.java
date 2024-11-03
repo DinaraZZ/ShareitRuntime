@@ -25,10 +25,6 @@ public class BookingJpaService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException("Пользователь не найден"));
 
-   /*     if (booking.getItem() == null) { // ?
-            throw new ValidationException("Товар не может быть пустым");
-        }*/
-
         Item item = itemRepository.findById(booking.getItem().getId())
                 .orElseThrow(() -> new NotFoundException("Товар не найден"));
         booking.setItem(item);

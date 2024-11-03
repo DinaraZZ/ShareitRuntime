@@ -1,6 +1,8 @@
 package com.practice.shareitzeinolla.item;
 
+import com.practice.shareitzeinolla.booking.BookingJpaRepository;
 import com.practice.shareitzeinolla.exception.NotFoundException;
+import com.practice.shareitzeinolla.exception.ValidationException;
 import com.practice.shareitzeinolla.item.dto.ItemMapper;
 import com.practice.shareitzeinolla.user.User;
 import com.practice.shareitzeinolla.user.UserJpaRepository;
@@ -16,6 +18,8 @@ public class ItemJpaService {
     private final ItemJpaRepository itemRepository;
     private final ItemMapper itemMapper;
     private final UserJpaRepository userRepository;
+    private final BookingJpaRepository bookingRepository;
+    private final CommentJpaRepository commentJpaRepository;
 
     public Item create(Item item, Long userId) {
         User user = userRepository.findById(userId)
@@ -65,5 +69,23 @@ public class ItemJpaService {
                                 item.getDescription().toLowerCase().contains(text.toLowerCase()))
                                 && item.getAvailable() == true)
                 .toList();
+    }
+
+    public Comment addCommentary(Long userId, Long itemId, Comment comment) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new NotFoundException("Пользователь не найден"));
+        comment.setUser(user);
+
+        Item existingItem = itemRepository.findById(itemId)
+                .orElseThrow(() -> new NotFoundException("Товар не найден."));
+        comment.setItem(existingItem);
+
+        bookingRepository.findByUserIdAndItemId(userId, itemId)
+                .orElseThrow(() -> new ValidationException
+                        ("Данный пользователь не может оставить отзыв к этому товару."));
+
+        commentJpaRepository.save(comment);
+
+        return comment;
     }
 }

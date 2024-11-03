@@ -1,11 +1,18 @@
 package com.practice.shareitzeinolla.item.dto;
 
+import com.practice.shareitzeinolla.booking.BookingJpaRepository;
 import com.practice.shareitzeinolla.exception.ValidationException;
 import com.practice.shareitzeinolla.item.Item;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
+
 @Component
+@RequiredArgsConstructor
 public class ItemMapper {
+    private final BookingJpaRepository bookingRepository;
+
     public Item fromItemCreate(ItemCreateDto itemCreateDto) {
         Item item = new Item();
         item.setName(itemCreateDto.getName());
@@ -31,12 +38,18 @@ public class ItemMapper {
         itemResponseDto.setDescription(item.getDescription());
         itemResponseDto.setAvailable(item.getAvailable());
         itemResponseDto.setUser(item.getUser());
+        itemResponseDto.setComments(item.getComments());
+
+        /*itemResponseDto.setLastBooking(
+                bookingRepository.findLastBooking(item.getId(), LocalDateTime.now())
+                        .orElse(null));*/
+
         return itemResponseDto;
     }
 
     public void merge(Item existingItem, Item updatedItem) {
         if (updatedItem.getName() == null && updatedItem.getDescription() == null &&
-        updatedItem.getAvailable() == null && updatedItem.getUser() == null) {
+                updatedItem.getAvailable() == null && updatedItem.getUser() == null) {
             throw new ValidationException("Все поля не могут быть пустыми.");
         }
         if (updatedItem.getName() != null) {

@@ -1,9 +1,6 @@
 package com.practice.shareitzeinolla.item;
 
-import com.practice.shareitzeinolla.item.dto.ItemCreateDto;
-import com.practice.shareitzeinolla.item.dto.ItemMapper;
-import com.practice.shareitzeinolla.item.dto.ItemResponseDto;
-import com.practice.shareitzeinolla.item.dto.ItemUpdateDto;
+import com.practice.shareitzeinolla.item.dto.*;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -20,9 +17,10 @@ import static com.practice.shareitzeinolla.util.RequestConstants.USER_HEADER;
 @RequiredArgsConstructor
 public class ItemController {
     private static final Logger log = LoggerFactory.getLogger(ItemController.class);
-//    private final ItemService itemService;
+    //    private final ItemService itemService;
     private final ItemJpaService itemService;
     private final ItemMapper itemMapper;
+    private final CommentMapper commentMapper;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -45,7 +43,7 @@ public class ItemController {
                 itemService.update(itemMapper.fromItemUpdate(item), id, userId));
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/{id}") // ?
     @ResponseStatus(HttpStatus.OK)
     public ItemResponseDto findById(@PathVariable Long id) {
         log.debug("Получен запрос GET /items/{}", id);
@@ -81,5 +79,16 @@ public class ItemController {
         return itemService.search(text).stream()
                 .map(itemMapper::toResponse)
                 .toList();
+    }
+
+    @PostMapping("/{itemId}/comment") // ?
+    @ResponseStatus(HttpStatus.OK)
+    public CommentResponseDto addCommentary(@RequestHeader(name = USER_HEADER) Long userId,
+                                            @PathVariable Long itemId,
+                                            @Valid @RequestBody CommentCreateDto comment) {
+        log.debug("Получен запрос POST userId: {}, /items/{}/comment", userId, itemId);
+
+        return commentMapper.toResponse(
+                itemService.addCommentary(userId, itemId, commentMapper.fromCommentCreate(comment)));
     }
 }

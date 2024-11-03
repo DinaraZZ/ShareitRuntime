@@ -1,12 +1,13 @@
 package com.practice.shareitzeinolla.item;
 
-import com.practice.shareitzeinolla.booking.Booking;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.practice.shareitzeinolla.user.User;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.util.List;
+
 
 @Getter
 @Setter
@@ -30,6 +31,10 @@ public class Item {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
+
+    @OneToMany(mappedBy = "item")
+    @JsonIgnore
+    private List<Comment> comments;
 
     public Item(Long id) {
         this.id = id;
