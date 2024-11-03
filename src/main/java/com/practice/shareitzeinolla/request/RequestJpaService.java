@@ -6,6 +6,8 @@ import com.practice.shareitzeinolla.user.UserJpaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class RequestJpaService {
@@ -19,5 +21,13 @@ public class RequestJpaService {
 
         requestRepository.save(request);
         return request;
+    }
+
+    public List<Request> findAll(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new NotFoundException("Пользователь не найден"));
+
+        List<Request> requests = requestRepository.findAllByUserId(userId);
+        return requests;
     }
 }

@@ -1,11 +1,15 @@
 package com.practice.shareitzeinolla.request;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.practice.shareitzeinolla.item.Comment;
+import com.practice.shareitzeinolla.item.Item;
 import com.practice.shareitzeinolla.user.User;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -26,4 +30,8 @@ public class Request {
 
     @Column(name = "created")
     private LocalDateTime created;
+
+    @OneToMany(mappedBy = "request")
+    @JsonIgnore
+    private List<Item> items;
 }

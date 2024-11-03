@@ -10,6 +10,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collection;
+import java.util.List;
+
 import static com.practice.shareitzeinolla.util.RequestConstants.USER_HEADER;
 
 @RestController
@@ -28,5 +31,15 @@ public class RequestController {
 
         return requestMapper.toResponse(
                 requestService.create(requestMapper.fromRequestCreate(request), userId));
+    }
+
+    @GetMapping
+    @ResponseStatus(HttpStatus.OK)
+    public Collection<RequestResponseDto> findAll(@RequestHeader(name = USER_HEADER) Long userId) {
+        log.debug("Получен запрос GET userId: {}, /requests: {}", userId);
+
+        return requestService.findAll(userId).stream()
+                .map(requestMapper::toResponse)
+                .toList();
     }
 }
