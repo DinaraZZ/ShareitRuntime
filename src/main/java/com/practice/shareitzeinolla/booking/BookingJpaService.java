@@ -10,9 +10,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -43,10 +43,24 @@ public class BookingJpaService {
                     "Дата начала бронирования должна быть раньше даты окончания бронирования");
         }
 
-        booking.setUser(user);
-        booking.setStatus(BookingStatus.WAITING);
+//        System.out.println(booking);
+//        System.out.println(bookingRepository.findBookingBetweenDates(
+//                item.getId(), booking.getFromDate(), booking.getToDate()));
 
-        bookingRepository.save(booking);
+        Booking itemAlreadyBooked = bookingRepository.findBookingBetweenDates(
+                        item.getId(), booking.getFromDate(), booking.getToDate())
+                .orElse(null);
+
+        System.out.println(itemAlreadyBooked);
+        if (itemAlreadyBooked == null) {
+            booking.setUser(user);
+            booking.setStatus(BookingStatus.WAITING);
+
+            bookingRepository.save(booking);
+        } else {
+            throw new ValidationException("Данный товар уже забронирован на эти даты.");
+        }
+
         return booking;
     }
 

@@ -4,7 +4,6 @@ import com.practice.shareitzeinolla.booking.dto.BookingCreateDto;
 import com.practice.shareitzeinolla.booking.dto.BookingMapper;
 import com.practice.shareitzeinolla.booking.dto.BookingResponseDto;
 import jakarta.validation.Valid;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
