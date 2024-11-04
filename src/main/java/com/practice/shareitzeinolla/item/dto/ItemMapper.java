@@ -7,11 +7,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Component
 @RequiredArgsConstructor
 public class ItemMapper {
     private final BookingJpaRepository bookingRepository;
+    private final CommentMapper commentMapper;
 
     public Item fromItemCreate(ItemCreateDto itemCreateDto) {
         Item item = new Item();
@@ -38,11 +40,15 @@ public class ItemMapper {
         itemResponseDto.setDescription(item.getDescription());
         itemResponseDto.setAvailable(item.getAvailable());
         itemResponseDto.setUser(item.getUser());
-        itemResponseDto.setComments(item.getComments());
 
-        /*itemResponseDto.setLastBooking(
-                bookingRepository.findLastBooking(item.getId(), LocalDateTime.now())
-                        .orElse(null));*/
+        if (item.getComments() != null) {
+            List<CommentResponseDto> comments = item.getComments().stream()
+                    .map(commentMapper::toResponse).toList();
+            itemResponseDto.setComments(comments);
+        }
+        itemResponseDto.setLastBooking(
+                bookingRepository.findLastBooking(item.getId())
+                        .orElse(null));
 
         if (item.getRequest() != null) {
             itemResponseDto.setRequestId(item.getRequest().getId());

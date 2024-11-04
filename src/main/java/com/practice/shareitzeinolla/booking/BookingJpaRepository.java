@@ -36,8 +36,8 @@ public interface BookingJpaRepository extends JpaRepository<Booking, Long> {
     @Query(value = """
             select b from Booking b
             where b.item.id = :itemId
-            and b.toDate <= :date
+            and b.toDate < CURRENT_TIMESTAMP
             order by b.toDate desc
             limit 1""")
-    Optional<Booking> findLastBooking(@Param("itemId") Long itemId, @Param("date") LocalDateTime date);
+    Optional<Booking> findLastBooking(@Param("itemId") Long itemId);
 }

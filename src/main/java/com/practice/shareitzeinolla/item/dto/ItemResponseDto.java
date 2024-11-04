@@ -14,7 +14,7 @@ public class ItemResponseDto {
     private String description;
     private Boolean available;
     private User user;
-    private List<Comment> comments;
+    private List<CommentResponseDto> comments;
     private Booking lastBooking; // ?
     private Booking nextBooking; // ?
     private Long requestId;
