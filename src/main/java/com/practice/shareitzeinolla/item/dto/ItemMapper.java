@@ -1,6 +1,7 @@
 package com.practice.shareitzeinolla.item.dto;
 
 import com.practice.shareitzeinolla.booking.BookingJpaRepository;
+import com.practice.shareitzeinolla.booking.BookingStatus;
 import com.practice.shareitzeinolla.exception.ValidationException;
 import com.practice.shareitzeinolla.item.Item;
 import lombok.RequiredArgsConstructor;
@@ -47,7 +48,7 @@ public class ItemMapper {
             itemResponseDto.setComments(comments);
         }
         itemResponseDto.setLastBooking(
-                bookingRepository.findLastBooking(item.getId())
+                bookingRepository.findLastBooking(item.getId(), BookingStatus.APPROVED, LocalDateTime.now())
                         .orElse(null));
 
         if (item.getRequest() != null) {

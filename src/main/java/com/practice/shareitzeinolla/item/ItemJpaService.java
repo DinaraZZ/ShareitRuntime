@@ -1,5 +1,6 @@
 package com.practice.shareitzeinolla.item;
 
+import com.practice.shareitzeinolla.booking.Booking;
 import com.practice.shareitzeinolla.booking.BookingJpaRepository;
 import com.practice.shareitzeinolla.exception.NotFoundException;
 import com.practice.shareitzeinolla.exception.ValidationException;
@@ -9,6 +10,7 @@ import com.practice.shareitzeinolla.user.UserJpaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 
@@ -80,11 +82,16 @@ public class ItemJpaService {
                 .orElseThrow(() -> new NotFoundException("Товар не найден."));
         comment.setItem(existingItem);
 
-        bookingRepository.findByUserIdAndItemId(userId, itemId)
+        Booking booking = bookingRepository.findByUserIdAndItemId(userId, itemId)
                 .orElseThrow(() -> new ValidationException
                         ("Данный пользователь не может оставить отзыв к этому товару."));
 
-        commentJpaRepository.save(comment);
+        if (booking.getToDate().isBefore(LocalDateTime.now())) {
+            commentJpaRepository.save(comment);
+        } else {
+            throw new ValidationException(
+                    "Пользователь может оставлять комментарии только после окончания бронирования.");
+        }
 
         return comment;
     }

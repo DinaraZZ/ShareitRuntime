@@ -33,11 +33,19 @@ public interface BookingJpaRepository extends JpaRepository<Booking, Long> {
 
     Optional<Booking> findByUserIdAndItemId(Long userId, Long itemId);
 
-    @Query(value = """
+    /*@Query(value = """
             select b from Booking b
             where b.item.id = :itemId
             and b.toDate < CURRENT_TIMESTAMP
             order by b.toDate desc
             limit 1""")
-    Optional<Booking> findLastBooking(@Param("itemId") Long itemId);
+    Optional<Booking> findLastBooking(@Param("itemId") Long itemId);*/
+    @Query(value = """
+        select b from Booking b
+        where b.item.id = :itemId
+        and b.fromDate < :date
+        and b.status = :status
+        order by b.fromDate desc
+        limit 1""")
+    Optional<Booking> findLastBooking(@Param("itemId") Long itemId, BookingStatus status, LocalDateTime date);
 }
