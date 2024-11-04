@@ -6,6 +6,10 @@ import com.practice.shareitzeinolla.user.UserJpaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+
 import java.util.List;
 
 @Service
@@ -34,5 +38,11 @@ public class RequestJpaService {
     public Request findById(Long requestId) {
         return requestRepository.findById(requestId)
                 .orElseThrow(() -> new NotFoundException("Запрос не найден"));
+    }
+
+    public List<Request> findAllOtherUsers(Long userId, Integer fromIndex, Integer size) {
+        Pageable pageable = PageRequest.of(fromIndex / size, size);
+
+        return requestRepository.findAllExceptUserId(userId, pageable);
     }
 }

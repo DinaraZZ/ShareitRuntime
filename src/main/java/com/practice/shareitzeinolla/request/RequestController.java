@@ -11,7 +11,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
-import java.util.List;
 
 import static com.practice.shareitzeinolla.util.RequestConstants.USER_HEADER;
 
@@ -49,5 +48,18 @@ public class RequestController {
         log.debug("Получен запрос GET /requests/{}", requestId);
         return requestMapper.toResponse(
                 requestService.findById(requestId));
+    }
+
+    @GetMapping("/all")
+    @ResponseStatus(HttpStatus.OK)
+    public Collection<RequestResponseDto> findAllOtherUsers
+            (@RequestHeader(name = USER_HEADER) Long userId,
+             @RequestParam(name = "from", defaultValue = "0") Integer fromIndex,
+             @RequestParam(name = "size", defaultValue = "10") Integer size) {
+        log.debug("Получен запрос GET /requests/all?from={}&size={}", fromIndex, size);
+
+        return requestService.findAllOtherUsers(userId, fromIndex, size).stream()
+                .map(requestMapper::toResponse)
+                .toList();
     }
 }
