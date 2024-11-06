@@ -1,7 +1,5 @@
-package com.practice.shareitzeinolla;
+package com.practice.shareitzeinolla.user;
 
-import com.practice.shareitzeinolla.user.User;
-import com.practice.shareitzeinolla.user.UserJpaRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,9 +1,6 @@
-package com.practice.shareitzeinolla;
+package com.practice.shareitzeinolla.user;
 
 import com.practice.shareitzeinolla.exception.NotFoundException;
-import com.practice.shareitzeinolla.user.User;
-import com.practice.shareitzeinolla.user.UserJpaRepository;
-import com.practice.shareitzeinolla.user.UserJpaService;
 import com.practice.shareitzeinolla.user.dto.UserMapper;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
