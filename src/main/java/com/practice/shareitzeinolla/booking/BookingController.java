@@ -56,22 +56,28 @@ public class BookingController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public Collection<BookingResponseDto> findAllByUser(@RequestHeader(name = USER_HEADER) Long userId,
-                                                        @RequestParam(name = "state", required = false, defaultValue = "ALL") String state) {
+    public Collection<BookingResponseDto> findAllByUser(
+            @RequestHeader(name = USER_HEADER) Long userId,
+            @RequestParam(name = "state", required = false, defaultValue = "ALL") String state,
+            @RequestParam(name = "from", defaultValue = "0") Integer fromIndex,
+            @RequestParam(name = "size", defaultValue = "10") Integer size) {
         log.debug("Получен запрос GET userId: {}, /bookings?state={}", userId, state);
 
-        return bookingService.findAllByUser(userId, state).stream()
+        return bookingService.findAllByUser(userId, state, fromIndex, size).stream()
                 .map(bookingMapper::toResponse)
                 .toList();
     }
 
     @GetMapping("/owner")
     @ResponseStatus(HttpStatus.OK)
-    public Collection<BookingResponseDto> findAllByOwner(@RequestHeader(name = USER_HEADER) Long userId,
-                                                         @RequestParam(name = "state", required = false, defaultValue = "ALL") String state) {
+    public Collection<BookingResponseDto> findAllByOwner(
+            @RequestHeader(name = USER_HEADER) Long userId,
+            @RequestParam(name = "state", required = false, defaultValue = "ALL") String state,
+            @RequestParam(name = "from", defaultValue = "0") Integer fromIndex,
+            @RequestParam(name = "size", defaultValue = "10") Integer size) {
         log.debug("Получен запрос GET userId: {}, /bookings/owner?state={}", userId, state);
 
-        return bookingService.findAllByOwner(userId, state).stream()
+        return bookingService.findAllByOwner(userId, state, fromIndex, size).stream()
                 .map(bookingMapper::toResponse)
                 .toList();
     }

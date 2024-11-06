@@ -55,10 +55,12 @@ public class ItemController {
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public Collection<ItemResponseDto> findAll(
-            @RequestHeader(name = USER_HEADER) Long userId) {
+            @RequestHeader(name = USER_HEADER) Long userId,
+            @RequestParam(name = "from", defaultValue = "0") Integer fromIndex,
+            @RequestParam(name = "size", defaultValue = "10") Integer size) {
         log.debug("Получен запрос GET /items");
 
-        return itemService.findAll(userId).stream()
+        return itemService.findAll(userId, fromIndex, size).stream()
                 .map(itemMapper::toResponse)
                 .toList();
     }
@@ -73,10 +75,13 @@ public class ItemController {
 
     @GetMapping("/search")
     @ResponseStatus(HttpStatus.OK)
-    public Collection<ItemResponseDto> search(@RequestParam String text) {
+    public Collection<ItemResponseDto> search(
+            @RequestParam String text,
+            @RequestParam(name = "from", defaultValue = "0") Integer fromIndex,
+            @RequestParam(name = "size", defaultValue = "10") Integer size) {
         log.debug("Получен запрос GET /search?text=", text);
 
-        return itemService.search(text).stream()
+        return itemService.search(text, fromIndex, size).stream()
                 .map(itemMapper::toResponse)
                 .toList();
     }

@@ -1,5 +1,6 @@
 package com.practice.shareitzeinolla.booking;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -9,26 +10,26 @@ import java.util.List;
 import java.util.Optional;
 
 public interface BookingJpaRepository extends JpaRepository<Booking, Long> {
-    List<Booking> findAllByUserIdOrderByFromDateDesc(Long userId);
+    List<Booking> findAllByUserIdOrderByFromDateDesc(Long userId, Pageable pageable);
 
-    List<Booking> findAllByUserIdAndToDateAfterOrderByFromDateDesc(Long userId, LocalDateTime date);
+    List<Booking> findAllByUserIdAndToDateAfterOrderByFromDateDesc(Long userId, LocalDateTime date, Pageable pageable);
 
-    List<Booking> findAllByUserIdAndToDateBeforeOrderByFromDateDesc(Long userId, LocalDateTime date);
+    List<Booking> findAllByUserIdAndToDateBeforeOrderByFromDateDesc(Long userId, LocalDateTime date, Pageable pageable);
 
-    List<Booking> findAllByUserIdAndFromDateAfterOrderByFromDateDesc(Long userId, LocalDateTime date);
+    List<Booking> findAllByUserIdAndFromDateAfterOrderByFromDateDesc(Long userId, LocalDateTime date, Pageable pageable);
 
-    List<Booking> findAllByUserIdAndStatusOrderByFromDateDesc(Long userId, BookingStatus status);
+    List<Booking> findAllByUserIdAndStatusOrderByFromDateDesc(Long userId, BookingStatus status, Pageable pageable);
 
 
-    List<Booking> findAllByItem_UserIdOrderByFromDateDesc(Long userId);
+    List<Booking> findAllByItem_UserIdOrderByFromDateDesc(Long userId, Pageable pageable);
 
-    List<Booking> findAllByItem_UserIdAndToDateAfterOrderByFromDateDesc(Long userId, LocalDateTime date);
+    List<Booking> findAllByItem_UserIdAndToDateAfterOrderByFromDateDesc(Long userId, LocalDateTime date, Pageable pageable);
 
-    List<Booking> findAllByItem_UserIdAndToDateBeforeOrderByFromDateDesc(Long userId, LocalDateTime date);
+    List<Booking> findAllByItem_UserIdAndToDateBeforeOrderByFromDateDesc(Long userId, LocalDateTime date, Pageable pageable);
 
-    List<Booking> findAllByItem_UserIdAndFromDateAfterOrderByFromDateDesc(Long userId, LocalDateTime date);
+    List<Booking> findAllByItem_UserIdAndFromDateAfterOrderByFromDateDesc(Long userId, LocalDateTime date, Pageable pageable);
 
-    List<Booking> findAllByItem_UserIdAndStatusOrderByFromDateDesc(Long userId, BookingStatus status);
+    List<Booking> findAllByItem_UserIdAndStatusOrderByFromDateDesc(Long userId, BookingStatus status, Pageable pageable);
 
 
     Optional<Booking> findByUserIdAndItemId(Long userId, Long itemId);

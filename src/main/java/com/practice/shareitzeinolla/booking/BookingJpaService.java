@@ -7,6 +7,8 @@ import com.practice.shareitzeinolla.item.ItemJpaRepository;
 import com.practice.shareitzeinolla.user.User;
 import com.practice.shareitzeinolla.user.UserJpaRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -100,29 +102,31 @@ public class BookingJpaService {
         return booking;
     }
 
-    public List<Booking> findAllByUser(Long userId, String state) {
+    public List<Booking> findAllByUser(Long userId, String state, Integer fromIndex, Integer size) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException("Пользователь не найден"));
+
+        Pageable pageable = PageRequest.of(fromIndex / size, size);
 
         List<Booking> bookings = Collections.emptyList();
         switch (state) {
             case "ALL":
-                bookings = bookingRepository.findAllByUserIdOrderByFromDateDesc(userId);
+                bookings = bookingRepository.findAllByUserIdOrderByFromDateDesc(userId, pageable);
                 break;
             case "CURRENT":
-                bookings = bookingRepository.findAllByUserIdAndToDateAfterOrderByFromDateDesc(userId, LocalDateTime.now());
+                bookings = bookingRepository.findAllByUserIdAndToDateAfterOrderByFromDateDesc(userId, LocalDateTime.now(), pageable);
                 break;
             case "PAST":
-                bookings = bookingRepository.findAllByUserIdAndToDateBeforeOrderByFromDateDesc(userId, LocalDateTime.now());
+                bookings = bookingRepository.findAllByUserIdAndToDateBeforeOrderByFromDateDesc(userId, LocalDateTime.now(), pageable);
                 break;
             case "FUTURE":
-                bookings = bookingRepository.findAllByUserIdAndFromDateAfterOrderByFromDateDesc(userId, LocalDateTime.now());
+                bookings = bookingRepository.findAllByUserIdAndFromDateAfterOrderByFromDateDesc(userId, LocalDateTime.now(), pageable);
                 break;
             case "WAITING":
-                bookings = bookingRepository.findAllByUserIdAndStatusOrderByFromDateDesc(userId, BookingStatus.WAITING);
+                bookings = bookingRepository.findAllByUserIdAndStatusOrderByFromDateDesc(userId, BookingStatus.WAITING, pageable);
                 break;
             case "REJECTED":
-                bookings = bookingRepository.findAllByUserIdAndStatusOrderByFromDateDesc(userId, BookingStatus.REJECTED);
+                bookings = bookingRepository.findAllByUserIdAndStatusOrderByFromDateDesc(userId, BookingStatus.REJECTED, pageable);
                 break;
             default:
                 break;
@@ -131,29 +135,31 @@ public class BookingJpaService {
         return bookings;
     }
 
-    public List<Booking> findAllByOwner(Long userId, String state) {
+    public List<Booking> findAllByOwner(Long userId, String state, Integer fromIndex, Integer size) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException("Пользователь не найден"));
+
+        Pageable pageable = PageRequest.of(fromIndex / size, size);
 
         List<Booking> bookings = Collections.emptyList();
         switch (state) {
             case "ALL":
-                bookings = bookingRepository.findAllByItem_UserIdOrderByFromDateDesc(userId);
+                bookings = bookingRepository.findAllByItem_UserIdOrderByFromDateDesc(userId, pageable);
                 break;
             case "CURRENT":
-                bookings = bookingRepository.findAllByItem_UserIdAndToDateAfterOrderByFromDateDesc(userId, LocalDateTime.now());
+                bookings = bookingRepository.findAllByItem_UserIdAndToDateAfterOrderByFromDateDesc(userId, LocalDateTime.now(), pageable);
                 break;
             case "PAST":
-                bookings = bookingRepository.findAllByItem_UserIdAndToDateBeforeOrderByFromDateDesc(userId, LocalDateTime.now());
+                bookings = bookingRepository.findAllByItem_UserIdAndToDateBeforeOrderByFromDateDesc(userId, LocalDateTime.now(), pageable);
                 break;
             case "FUTURE":
-                bookings = bookingRepository.findAllByItem_UserIdAndFromDateAfterOrderByFromDateDesc(userId, LocalDateTime.now());
+                bookings = bookingRepository.findAllByItem_UserIdAndFromDateAfterOrderByFromDateDesc(userId, LocalDateTime.now(), pageable);
                 break;
             case "WAITING":
-                bookings = bookingRepository.findAllByItem_UserIdAndStatusOrderByFromDateDesc(userId, BookingStatus.WAITING);
+                bookings = bookingRepository.findAllByItem_UserIdAndStatusOrderByFromDateDesc(userId, BookingStatus.WAITING, pageable);
                 break;
             case "REJECTED":
-                bookings = bookingRepository.findAllByItem_UserIdAndStatusOrderByFromDateDesc(userId, BookingStatus.REJECTED);
+                bookings = bookingRepository.findAllByItem_UserIdAndStatusOrderByFromDateDesc(userId, BookingStatus.REJECTED, pageable);
                 break;
             default:
                 break;

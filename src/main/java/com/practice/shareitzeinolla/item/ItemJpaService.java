@@ -8,6 +8,8 @@ import com.practice.shareitzeinolla.item.dto.ItemMapper;
 import com.practice.shareitzeinolla.user.User;
 import com.practice.shareitzeinolla.user.UserJpaRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -55,17 +57,21 @@ public class ItemJpaService {
                 .orElseThrow(() -> new NotFoundException("Товар не найден."));
     }
 
-    public List<Item> findAll(Long userId) {
-        return itemRepository.findAllByUserId(userId);
+    public List<Item> findAll(Long userId, Integer fromIndex, Integer size) {
+        Pageable pageable = PageRequest.of(fromIndex / size, size);
+
+        return itemRepository.findAllByUserId(userId, pageable);
     }
 
     public void deleteById(Long itemId) {
         itemRepository.deleteById(itemId);
     }
 
-    public List<Item> search(String text) {
+    public List<Item> search(String text, Integer fromIndex, Integer size) {
+        Pageable pageable = PageRequest.of(fromIndex / size, size);
+
         if (text == null || text.isEmpty()) return Collections.emptyList();
-        return itemRepository.findAll().stream()
+        return itemRepository.findAll(pageable).stream()
                 .filter(item ->
                         (item.getName().toLowerCase().contains(text.toLowerCase()) |
                                 item.getDescription().toLowerCase().contains(text.toLowerCase()))
