@@ -29,7 +29,7 @@ public class UserControllerTest {
         user.setName("ControllerTest");
         user.setEmail("controller@test.com");
 
-        userRepository.save(user);
+//        userRepository.save(user); post method
 
         ResultActions perform = mockMvc.perform(MockMvcRequestBuilders.get("/users/1"));
 

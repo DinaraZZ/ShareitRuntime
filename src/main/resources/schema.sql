@@ -7,7 +7,7 @@ drop table if exists users;
 
 create table if not exists users
 (
-    id    serial8,
+    id    int8 generated always as identity,
     name  varchar not null,
     email varchar not null unique,
     primary key (id)
@@ -15,7 +15,7 @@ create table if not exists users
 
 create table if not exists requests
 (
-    id          serial8,
+    id          int8 generated always as identity,
     user_id     int8      not null,
     description varchar   not null,
     created     timestamp without time zone not null,
@@ -25,7 +25,7 @@ create table if not exists requests
 
 create table if not exists items
 (
-    id          serial8,
+    id          int8 generated always as identity,
     name        varchar not null,
     description varchar not null,
     available   boolean not null,
@@ -38,7 +38,7 @@ create table if not exists items
 
 create table if not exists bookings
 (
-    id        serial8,
+    id        int8 generated always as identity,
     user_id   int8      not null, -- бронирующий пользователь
     item_id   int8      not null,
     status    int2      not null, -- статус enum
@@ -51,7 +51,7 @@ create table if not exists bookings
 
 create table if not exists comments
 (
-    id           serial8,
+    id           int8 generated always as identity,
     user_id      int8    not null,
     item_id      int8    not null,
     text         varchar not null,

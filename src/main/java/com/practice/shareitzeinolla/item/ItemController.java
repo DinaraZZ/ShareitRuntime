@@ -79,7 +79,7 @@ public class ItemController {
             @RequestParam String text,
             @RequestParam(name = "from", defaultValue = "0") Integer fromIndex,
             @RequestParam(name = "size", defaultValue = "10") Integer size) {
-        log.debug("Получен запрос GET /search?text=", text);
+        log.debug("Получен запрос GET /search?text={}", text);
 
         return itemService.search(text, fromIndex, size).stream()
                 .map(itemMapper::toResponse)

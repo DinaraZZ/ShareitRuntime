@@ -68,10 +68,10 @@ public class ItemJpaService {
     }
 
     public List<Item> search(String text, Integer fromIndex, Integer size) {
-        Pageable pageable = PageRequest.of(fromIndex / size, size);
+//        Pageable pageable = PageRequest.of(fromIndex / size, size);
 
         if (text == null || text.isEmpty()) return Collections.emptyList();
-        return itemRepository.findAll(pageable).stream()
+        return itemRepository.findAll().stream()
                 .filter(item ->
                         (item.getName().toLowerCase().contains(text.toLowerCase()) |
                                 item.getDescription().toLowerCase().contains(text.toLowerCase()))
