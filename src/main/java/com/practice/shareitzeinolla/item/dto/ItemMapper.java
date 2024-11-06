@@ -2,8 +2,11 @@ package com.practice.shareitzeinolla.item.dto;
 
 import com.practice.shareitzeinolla.booking.BookingJpaRepository;
 import com.practice.shareitzeinolla.booking.BookingStatus;
+import com.practice.shareitzeinolla.exception.NotFoundException;
 import com.practice.shareitzeinolla.exception.ValidationException;
 import com.practice.shareitzeinolla.item.Item;
+import com.practice.shareitzeinolla.request.Request;
+import com.practice.shareitzeinolla.request.RequestJpaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -14,6 +17,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ItemMapper {
     private final BookingJpaRepository bookingRepository;
+    private final RequestJpaRepository requestRepository;
     private final CommentMapper commentMapper;
 
     public Item fromItemCreate(ItemCreateDto itemCreateDto) {
@@ -22,6 +26,13 @@ public class ItemMapper {
         item.setDescription(itemCreateDto.getDescription());
         item.setAvailable(itemCreateDto.getAvailable());
         item.setUser(itemCreateDto.getUser());
+
+        if (itemCreateDto.getRequestId() != null) {
+            Request request = requestRepository.findById(itemCreateDto.getRequestId())
+                    .orElseThrow(() -> new NotFoundException("Запрос не найден."));
+            item.setRequest(request);
+        }
+
         return item;
     }
 

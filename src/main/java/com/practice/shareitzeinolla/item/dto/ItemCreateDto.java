@@ -17,4 +17,6 @@ public class ItemCreateDto {
     private Boolean available;
 
     private User user;
+
+    private Long requestId;
 }
