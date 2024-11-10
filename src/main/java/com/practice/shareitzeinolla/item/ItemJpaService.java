@@ -89,8 +89,7 @@ public class ItemJpaService {
         comment.setItem(existingItem);
 
         Booking booking = bookingRepository.findByUserIdAndItemId(userId, itemId)
-                .orElseThrow(() -> new ValidationException
-                        ("Данный пользователь не может оставить отзыв к этому товару."));
+                .orElseThrow(() -> new ValidationException("Данный пользователь не может оставить отзыв к этому товару."));
 
         if (booking.getToDate().isBefore(LocalDateTime.now())) {
             commentJpaRepository.save(comment);

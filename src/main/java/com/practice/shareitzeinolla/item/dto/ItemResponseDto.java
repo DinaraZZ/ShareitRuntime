@@ -1,7 +1,6 @@
 package com.practice.shareitzeinolla.item.dto;
 
 import com.practice.shareitzeinolla.booking.Booking;
-import com.practice.shareitzeinolla.item.Comment;
 import com.practice.shareitzeinolla.user.User;
 import lombok.Data;
 

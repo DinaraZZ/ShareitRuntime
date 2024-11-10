@@ -6,23 +6,18 @@ import com.practice.shareitzeinolla.user.dto.UserResponseDto;
 import com.practice.shareitzeinolla.user.dto.UserUpdateDto;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-
 import java.util.Collection;
-
 
 @RestController
 @RequestMapping("/users")
 @RequiredArgsConstructor
+@Slf4j
 public class UserController {
-    private static final Logger log = LoggerFactory.getLogger(UserController.class);
-
-    // patch - может поступить только одно имя, либо имейл - частичное обновление
-//    private final UserService userService;
+    //private final UserService userService;
     private final UserJpaService userService;
     private final UserMapper userMapper;
 

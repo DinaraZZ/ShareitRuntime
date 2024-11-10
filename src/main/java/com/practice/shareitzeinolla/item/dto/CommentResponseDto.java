@@ -1,6 +1,5 @@
 package com.practice.shareitzeinolla.item.dto;
 
-import com.practice.shareitzeinolla.item.Item;
 import lombok.Data;
 
 import java.time.LocalDate;

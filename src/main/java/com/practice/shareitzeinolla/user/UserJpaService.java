@@ -23,7 +23,6 @@ public class UserJpaService {
     }
 
     public User update(User user, Long userId) {
-
         User existingUser = userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException("Пользователь не найден."));
 

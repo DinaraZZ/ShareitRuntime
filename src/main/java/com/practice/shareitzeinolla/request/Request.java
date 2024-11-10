@@ -1,7 +1,6 @@
 package com.practice.shareitzeinolla.request;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.practice.shareitzeinolla.item.Comment;
 import com.practice.shareitzeinolla.item.Item;
 import com.practice.shareitzeinolla.user.User;
 import jakarta.persistence.*;
