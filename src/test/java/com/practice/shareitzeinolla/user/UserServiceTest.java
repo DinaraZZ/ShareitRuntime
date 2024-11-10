@@ -11,6 +11,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -161,5 +162,15 @@ public class UserServiceTest {
 
         Mockito.verify(userRepository, Mockito.times(1))
                 .deleteById(existingId);
+    }
+
+    @Test
+    void checkEmail_shouldReturn_whenEmailIsNull() {
+        User user = new User("ServiceTestCheckEmail", null);
+
+        userService.create(user);
+
+        Mockito.verify(userRepository, Mockito.never())
+                .findAll();
     }
 }
