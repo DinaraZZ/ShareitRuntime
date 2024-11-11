@@ -11,7 +11,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,19 +21,15 @@ public class UserServiceTest {
     @Mock
     UserJpaRepository userRepository;
 
-    @Mock
-    UserMapper userMapper;
-
     @BeforeEach
     void createService() {
-        userService = new UserJpaService(userRepository, userMapper);
+        userService = new UserJpaService(userRepository, new UserMapper());
     }
 
     @Test
     void createUser_shouldCreate_whenUserCorrect() { // ?
-        User user = new User("ServiceTestCreate", "service@test.com");
+        User user = new User("ServiceTestCreate", "service1@create.com");
 
-//        Mockito.when(userService.create(user)).thenReturn(user);
         Mockito.when(userRepository.save(user))
                 .thenReturn(user);
 
@@ -42,7 +37,7 @@ public class UserServiceTest {
 
         Assertions.assertNotNull(createdUser);
         Assertions.assertEquals("ServiceTestCreate", createdUser.getName());
-        Assertions.assertEquals("service@test.com", createdUser.getEmail());
+        Assertions.assertEquals("service1@create.com", createdUser.getEmail());
 
         Mockito.verify(userRepository, Mockito.times(1))
                 .save(Mockito.any(User.class));
@@ -50,9 +45,9 @@ public class UserServiceTest {
 
     @Test
     void createUser_shouldThrowException_whenEmailAlreadyExists() {
-        User existingUser = new User("ServiceTestCreate", "service@test.com");
+        User existingUser = new User("ServiceTestCreate", "service2@create.com");
         existingUser.setId(1L);
-        User newUser = new User("ServiceTestCreateNew", "service@test.com");
+        User newUser = new User("ServiceTestCreateNew", "service2@create.com");
 
         Mockito.when(userRepository.findAll())
                 .thenReturn(List.of(existingUser));
@@ -65,13 +60,13 @@ public class UserServiceTest {
         Assertions.assertEquals("Пользователь с данной почтой уже существует", exception.getMessage());
     }
 
-    /*@Test
+    @Test
     void updateUser_shouldUpdate_whenUserExists() { // ?
         Long existingId = 1L;
-        User existingUser = new User("ServiceTestUpdate1", "service1@test.com");
+        User existingUser = new User("ServiceTestUpdate1", "service1@update.com");
         existingUser.setId(existingId);
 
-        User updatedUser = new User("ServiceTestUpdate2", "service2@test.com");
+        User updatedUser = new User("ServiceTestUpdate2", "service2@update.com");
 
         Mockito.when(userRepository.findById(existingId))
                 .thenReturn(Optional.of(existingUser));
@@ -83,12 +78,33 @@ public class UserServiceTest {
 
         Assertions.assertNotNull(result);
         Assertions.assertEquals("ServiceTestUpdate2", result.getName());
-        Assertions.assertEquals("service2@test.com", result.getEmail());
-    }*/
+        Assertions.assertEquals("service2@update.com", result.getEmail());
+    }
+
+    @Test
+    void updateUser_shouldUpdate_whenSameEmail() { // ?
+        Long existingId = 1L;
+        User existingUser = new User("ServiceTestUpdate3", "service3@update.com");
+        existingUser.setId(existingId);
+
+        User updatedUser = new User("ServiceTestUpdate4", "service3@update.com");
+
+        Mockito.when(userRepository.findById(existingId))
+                .thenReturn(Optional.of(existingUser));
+
+        Mockito.when(userRepository.save(Mockito.any(User.class)))
+                .thenReturn(updatedUser);
+
+        User result = userService.update(updatedUser, existingId);
+
+        Assertions.assertNotNull(result);
+        Assertions.assertEquals("ServiceTestUpdate4", result.getName());
+        Assertions.assertEquals("service3@update.com", result.getEmail());
+    }
 
     @Test
     void updateUser_shouldThrowException_whenUserDoesNotExist() {
-        User user = new User("ServiceTest", "service@test.com");
+        User user = new User("ServiceTest", "service3@update.com");
 
         Long notExistingId = 100L;
 
@@ -105,7 +121,7 @@ public class UserServiceTest {
 
     @Test
     void findByIdUser_shouldFind_whenUserCorrect() {
-        User user = new User("ServiceTestFindById", "service@test.com");
+        User user = new User("ServiceTestFindById", "service1@findbyid.com");
         Long existingId = 1L;
 
         Mockito.when(userRepository.findById(existingId))
@@ -115,7 +131,7 @@ public class UserServiceTest {
 
         Assertions.assertNotNull(foundUser);
         Assertions.assertEquals("ServiceTestFindById", foundUser.getName());
-        Assertions.assertEquals("service@test.com", foundUser.getEmail());
+        Assertions.assertEquals("service1@findbyid.com", foundUser.getEmail());
     }
 
     @Test
@@ -136,10 +152,10 @@ public class UserServiceTest {
     @Test
     void findAllUsers_shouldFindAllUsers_whenUsersExists() {
         List<User> users = List.of(
-                new User("ServiceTestFindAll1", "service1@test.com"),
-                new User("ServiceTestFindAll2", "service2@test.com"),
-                new User("ServiceTestFindAll3", "service3@test.com"),
-                new User("ServiceTestFindAll4", "service4@test.com")
+                new User("ServiceTestFindAll1", "service1@findall.com"),
+                new User("ServiceTestFindAll2", "service2@findall.com"),
+                new User("ServiceTestFindAll3", "service3@findall.com"),
+                new User("ServiceTestFindAll4", "service4@findall.com")
         );
 
         Mockito.when(userRepository.findAll())
@@ -153,7 +169,7 @@ public class UserServiceTest {
 
     @Test
     void deleteByIdUser_shouldDelete_whenUserExists() {
-        User user = new User("ServiceTestDelete", "service@test.com");
+        User user = new User("ServiceTestDelete", "service1@deletebyid.com");
         Long existingId = 1L;
 
         Mockito.doNothing().when(userRepository).deleteById(existingId);

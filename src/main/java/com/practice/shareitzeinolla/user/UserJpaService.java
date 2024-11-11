@@ -7,11 +7,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class UserJpaService {
+public class  UserJpaService {
     private final UserJpaRepository userRepository;
     private final UserMapper userMapper;
 
@@ -28,6 +29,7 @@ public class UserJpaService {
 
         user.setId(userId);
         checkEmail(user);
+
         userMapper.merge(existingUser, user);
         userRepository.save(existingUser);
 
@@ -55,7 +57,7 @@ public class UserJpaService {
                 .filter(u -> u.getEmail().equals(user.getEmail()))
                 .findAny();
         if (optional.isPresent()) {
-            if (optional.get().getId() != user.getId()) {
+            if (!Objects.equals(optional.get().getId(), user.getId())) {
                 throw new UserExistsException("Пользователь с данной почтой уже существует");
             }
         }

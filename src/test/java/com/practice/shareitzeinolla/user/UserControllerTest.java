@@ -31,7 +31,7 @@ public class UserControllerTest {
     @Transactional
     void userFindById_shouldReturnUser_whenUserExists() {
         // POST user
-        User user = new User("ControllerTestFindById", "controller@test.com");
+        User user = new User("ControllerTestFindById", "controller1@findbyid.com");
 
         ObjectMapper objectMapper = new ObjectMapper();
         String json = objectMapper.writeValueAsString(user);
@@ -48,14 +48,14 @@ public class UserControllerTest {
         perform.andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.name", Matchers.equalTo("ControllerTestFindById")))
 //                .andExpect(MockMvcResultMatchers.jsonPath("$.name").value("ControllerTestFindById"))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.email", Matchers.equalTo("controller@test.com")));
+                .andExpect(MockMvcResultMatchers.jsonPath("$.email", Matchers.equalTo("controller1@findbyid.com")));
     }
 
     @Test
     @SneakyThrows
     @Transactional
     void userCreate_shouldCreateUser_whenUserCorrect() {
-        User user = new User("ControllerTestCreate", "controller@test.com");
+        User user = new User("ControllerTestCreate", "controller1@create.com");
 
         ObjectMapper objectMapper = new ObjectMapper();
         String json = objectMapper.writeValueAsString(user);
@@ -72,10 +72,10 @@ public class UserControllerTest {
     void userFindAll_shouldFindAll_whenUsersExist() {
         // POST users
         List<User> users = List.of(
-                new User("ControllerTestFindAll1", "controller1@test.com"),
-                new User("ControllerTestFindAll2", "controller2@test.com"),
-                new User("ControllerTestFindAll3", "controller3@test.com"),
-                new User("ControllerTestFindAll4", "controller4@test.com")
+                new User("ControllerTestFindAll1", "controller1@findall.com"),
+                new User("ControllerTestFindAll2", "controller2@findall.com"),
+                new User("ControllerTestFindAll3", "controller3@findall.com"),
+                new User("ControllerTestFindAll4", "controller4@findall.com")
         );
 
         ObjectMapper objectMapper = new ObjectMapper();
@@ -99,7 +99,7 @@ public class UserControllerTest {
     @Transactional
     void userDeleteById_shouldDeleteUser_whenUserExists() {
         // POST user
-        User user = new User("ControllerTestDeleteById", "controller@test.com");
+        User user = new User("ControllerTestDeleteById", "controller1@deletebyid.com");
 
         ObjectMapper objectMapper = new ObjectMapper();
         String json = objectMapper.writeValueAsString(user);
@@ -124,7 +124,7 @@ public class UserControllerTest {
     @Transactional
     void userUpdate_shouldUpdateUser_whenUserExists() {
         // POST user
-        User user = new User("ControllerTestUpdate", "controller@test.com");
+        User user = new User("ControllerTestUpdate", "controller1@update.com");
 
         ObjectMapper objectMapper = new ObjectMapper();
         String json = objectMapper.writeValueAsString(user);
@@ -137,7 +137,7 @@ public class UserControllerTest {
 
         // PATCH user
         User updatedUser = new User();
-        updatedUser.setEmail("controller2@test.com");
+        updatedUser.setEmail("controller2@update.com");
         String patchJson = objectMapper.writeValueAsString(updatedUser);
 
         ResultActions patchResult = mockMvc.perform(MockMvcRequestBuilders.patch("/users/" + id)
@@ -149,6 +149,6 @@ public class UserControllerTest {
         ResultActions getResult = mockMvc.perform(MockMvcRequestBuilders.get("/users/" + id));
         getResult.andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.name", Matchers.equalTo("ControllerTestUpdate")))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.email", Matchers.equalTo("controller2@test.com")));
+                .andExpect(MockMvcResultMatchers.jsonPath("$.email", Matchers.equalTo("controller2@update.com")));
     }
 }

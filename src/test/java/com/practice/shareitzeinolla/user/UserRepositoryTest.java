@@ -19,7 +19,7 @@ public class UserRepositoryTest {
 
     @Test
     void saveUser_shouldSave_whenCorrectUserGiven() {
-        User user = new User("RepositoryTest", "repository@test.com");
+        User user = new User("RepositoryTest", "repository1@save.com");
 
         userRepository.save(user);
 
@@ -30,7 +30,7 @@ public class UserRepositoryTest {
 
     @Test
     void findByIdUser_shouldFind_whenUserExists() {
-        User user = new User("RepositoryTestFindById", "repository@test.com");
+        User user = new User("RepositoryTestFindById", "repository1@findbyid.com");
 
         userRepository.save(user);
 
@@ -42,7 +42,7 @@ public class UserRepositoryTest {
 
     @Test
     void findByIdUser_shouldThrowException_whenUserDoesNotExist() {
-        User user = new User("RepositoryTestFindById", "repository@test.com");
+        User user = new User("RepositoryTestFindById", "repository2@findbyid.com");
         Long notExistingId = 100L;
 
         userRepository.save(user);
@@ -59,10 +59,10 @@ public class UserRepositoryTest {
     @Test
     void findAllUsers_shouldFindAllUsers_whenUserExists() {
         List<User> users = List.of(
-                new User("RepositoryTestFindAll1", "repository1@test.com"),
-                new User("RepositoryTestFindAll2", "repository2@test.com"),
-                new User("RepositoryTestFindAll3", "repository3@test.com"),
-                new User("RepositoryTestFindAll4", "repository4@test.com")
+                new User("RepositoryTestFindAll1", "repository1@findall.com"),
+                new User("RepositoryTestFindAll2", "repository2@findall.com"),
+                new User("RepositoryTestFindAll3", "repository3@findall.com"),
+                new User("RepositoryTestFindAll4", "repository4@findall.com")
         );
 
         userRepository.saveAll(users);
@@ -74,7 +74,7 @@ public class UserRepositoryTest {
 
     @Test
     void deleteByIdUser_shouldDelete_whenUserExists() {
-        User user = new User("RepositoryTestDeleteById", "repository@test.com");
+        User user = new User("RepositoryTestDeleteById", "repository1@deletebyid.com");
 
         userRepository.save(user);
         userRepository.deleteById(user.getId());
