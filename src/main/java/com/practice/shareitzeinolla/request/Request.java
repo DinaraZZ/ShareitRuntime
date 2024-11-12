@@ -15,6 +15,13 @@ import java.util.List;
 @Entity
 @Table(name = "requests")
 public class Request {
+    public Request() {
+    }
+
+    public Request(String description) {
+        this.description = description;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
