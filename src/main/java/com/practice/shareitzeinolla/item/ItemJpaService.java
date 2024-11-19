@@ -43,7 +43,7 @@ public class ItemJpaService {
                 .orElseThrow(() -> new NotFoundException("Товар не найден."));
 
         if (user != existingItem.getUser()) {
-            throw new NotFoundException("");
+            throw new NotFoundException("Данный пользователь не имеет права менять товар.");
         }
         itemMapper.merge(existingItem, updatedItem);
 

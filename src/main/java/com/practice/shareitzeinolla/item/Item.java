@@ -15,6 +15,19 @@ import java.util.List;
 @Entity
 @Table(name = "items")
 public class Item {
+    public Item() {
+    }
+
+    public Item(Long id) {
+        this.id = id;
+    }
+
+    public Item(String name, String description, Boolean available) {
+        this.name = name;
+        this.description = description;
+        this.available = available;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -40,11 +53,4 @@ public class Item {
     @OneToMany(mappedBy = "item")
     @JsonIgnore
     private List<Comment> comments;
-
-    public Item(Long id) {
-        this.id = id;
-    }
-
-    public Item() {
-    }
 }

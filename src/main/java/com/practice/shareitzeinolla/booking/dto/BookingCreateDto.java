@@ -8,6 +8,14 @@ import java.time.LocalDateTime;
 
 @Data
 public class BookingCreateDto {
+    public BookingCreateDto() {
+    }
+
+    public BookingCreateDto(Long itemId, LocalDateTime start, LocalDateTime end) {
+        this.itemId = itemId;
+        this.start = start;
+        this.end = end;
+    }
 
     @NotNull(message = "Товар не может быть пустым.")
     private Long itemId;

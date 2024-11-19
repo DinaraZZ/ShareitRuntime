@@ -120,7 +120,7 @@ public class UserServiceTest {
     }
 
     @Test
-    void findByIdUser_shouldFind_whenUserCorrect() {
+    void findByIdUser_shouldFind_whenUserExists() {
         User user = new User("ServiceTestFindById", "service1@findbyid.com");
         Long existingId = 1L;
 

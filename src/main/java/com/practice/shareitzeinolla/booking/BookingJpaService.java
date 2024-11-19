@@ -66,7 +66,6 @@ public class BookingJpaService {
     }
 
     public Booking update(Long bookingId, Long userId, Boolean approved) {
-
         Booking booking = bookingRepository.findById(bookingId)
                 .orElseThrow(() -> new NotFoundException("Бронирование не найдено."));
 
@@ -114,7 +113,7 @@ public class BookingJpaService {
                 bookings = bookingRepository.findAllByUserIdOrderByFromDateDesc(userId, pageable);
                 break;
             case "CURRENT":
-                bookings = bookingRepository.findAllByUserIdAndToDateAfterOrderByFromDateDesc(userId, LocalDateTime.now(), pageable);
+                bookings = bookingRepository.findAllByUserIdAndFromDateBeforeAndToDateAfterOrderByFromDateDesc(userId, LocalDateTime.now(), LocalDateTime.now(), pageable);
                 break;
             case "PAST":
                 bookings = bookingRepository.findAllByUserIdAndToDateBeforeOrderByFromDateDesc(userId, LocalDateTime.now(), pageable);
@@ -147,7 +146,7 @@ public class BookingJpaService {
                 bookings = bookingRepository.findAllByItem_UserIdOrderByFromDateDesc(userId, pageable);
                 break;
             case "CURRENT":
-                bookings = bookingRepository.findAllByItem_UserIdAndToDateAfterOrderByFromDateDesc(userId, LocalDateTime.now(), pageable);
+                bookings = bookingRepository.findAllByItem_UserIdAndFromDateBeforeAndToDateAfterOrderByFromDateDesc(userId, LocalDateTime.now(), LocalDateTime.now(), pageable);
                 break;
             case "PAST":
                 bookings = bookingRepository.findAllByItem_UserIdAndToDateBeforeOrderByFromDateDesc(userId, LocalDateTime.now(), pageable);

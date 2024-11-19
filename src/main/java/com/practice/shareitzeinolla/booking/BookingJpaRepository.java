@@ -12,7 +12,7 @@ import java.util.Optional;
 public interface BookingJpaRepository extends JpaRepository<Booking, Long> {
     List<Booking> findAllByUserIdOrderByFromDateDesc(Long userId, Pageable pageable);
 
-    List<Booking> findAllByUserIdAndToDateAfterOrderByFromDateDesc(Long userId, LocalDateTime date, Pageable pageable);
+    List<Booking> findAllByUserIdAndFromDateBeforeAndToDateAfterOrderByFromDateDesc(Long userId, LocalDateTime dateOne, LocalDateTime dateTwo, Pageable pageable);
 
     List<Booking> findAllByUserIdAndToDateBeforeOrderByFromDateDesc(Long userId, LocalDateTime date, Pageable pageable);
 
@@ -23,7 +23,7 @@ public interface BookingJpaRepository extends JpaRepository<Booking, Long> {
 
     List<Booking> findAllByItem_UserIdOrderByFromDateDesc(Long userId, Pageable pageable);
 
-    List<Booking> findAllByItem_UserIdAndToDateAfterOrderByFromDateDesc(Long userId, LocalDateTime date, Pageable pageable);
+    List<Booking> findAllByItem_UserIdAndFromDateBeforeAndToDateAfterOrderByFromDateDesc(Long userId, LocalDateTime dateOne, LocalDateTime dateTwo, Pageable pageable);
 
     List<Booking> findAllByItem_UserIdAndToDateBeforeOrderByFromDateDesc(Long userId, LocalDateTime date, Pageable pageable);
 
@@ -51,10 +51,10 @@ public interface BookingJpaRepository extends JpaRepository<Booking, Long> {
     Optional<Booking> findLastBooking(@Param("itemId") Long itemId, BookingStatus status, LocalDateTime date);
 
     @Query(value = """
-    select b from Booking b
-    where b.item.id = :itemId
-    and (b.fromDate < :toDate and b.toDate > :fromDate) order by b.fromDate desc limit 1
-    """)
+            select b from Booking b
+            where b.item.id = :itemId
+            and (b.fromDate < :toDate and b.toDate > :fromDate) order by b.fromDate desc limit 1
+            """)
     Optional<Booking> findBookingBetweenDates(
             @Param("itemId") Long itemId,
             @Param("fromDate") LocalDateTime fromDate,

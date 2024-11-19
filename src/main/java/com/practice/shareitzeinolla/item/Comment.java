@@ -12,6 +12,13 @@ import java.time.LocalDate;
 @Entity
 @Table(name = "comments")
 public class Comment {
+    public Comment() {
+    }
+
+    public Comment(String text) {
+        this.text = text;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")

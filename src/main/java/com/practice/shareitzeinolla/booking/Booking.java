@@ -13,6 +13,15 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "bookings")
 public class Booking {
+    public Booking() {
+    }
+
+    public Booking(Item item, LocalDateTime fromDate, LocalDateTime toDate) {
+        this.item = item;
+        this.fromDate = fromDate;
+        this.toDate = toDate;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")

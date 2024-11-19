@@ -23,9 +23,6 @@ public class UserControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-    @Autowired
-    UserJpaRepository userRepository;
-
     @Test
     @SneakyThrows
     @Transactional

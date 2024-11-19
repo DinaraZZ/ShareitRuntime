@@ -42,7 +42,7 @@ public class ItemController {
                 itemService.update(itemMapper.fromItemUpdate(item), id, userId));
     }
 
-    @GetMapping("/{id}") // ?
+    @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public ItemResponseDto findById(@PathVariable Long id) {
         log.debug("Получен запрос GET /items/{}", id);
