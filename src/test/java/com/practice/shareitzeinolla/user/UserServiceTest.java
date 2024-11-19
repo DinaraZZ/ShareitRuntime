@@ -2,6 +2,7 @@ package com.practice.shareitzeinolla.user;
 
 import com.practice.shareitzeinolla.exception.NotFoundException;
 import com.practice.shareitzeinolla.exception.UserExistsException;
+import com.practice.shareitzeinolla.exception.ValidationException;
 import com.practice.shareitzeinolla.user.dto.UserMapper;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -117,6 +118,23 @@ public class UserServiceTest {
         );
 
         Assertions.assertEquals("Пользователь не найден.", exception.getMessage());
+    }
+
+    @Test
+    void updateUser_shouldThrowException_whenEmailAndNameAreNull() {
+        String expectedMessage = "Оба поля (имя, почта) не могут быть пустыми.";
+        User user = new User(null, null);
+        user.setId(1L);
+
+        Mockito.when(userRepository.findById(Mockito.anyLong()))
+                .thenReturn(Optional.of(user));
+
+        final ValidationException exception = Assertions.assertThrows(
+                ValidationException.class,
+                () -> userService.update(user, user.getId())
+        );
+
+        Assertions.assertEquals(expectedMessage, exception.getMessage());
     }
 
     @Test

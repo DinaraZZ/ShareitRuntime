@@ -5,7 +5,6 @@ import com.practice.shareitzeinolla.item.Item;
 import com.practice.shareitzeinolla.item.ItemJpaRepository;
 import com.practice.shareitzeinolla.user.User;
 import com.practice.shareitzeinolla.user.UserJpaRepository;
-import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;

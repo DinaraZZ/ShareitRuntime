@@ -2,7 +2,6 @@ package com.practice.shareitzeinolla.item;
 
 import com.practice.shareitzeinolla.booking.Booking;
 import com.practice.shareitzeinolla.booking.BookingJpaRepository;
-import com.practice.shareitzeinolla.booking.dto.BookingCreateDto;
 import com.practice.shareitzeinolla.exception.NotFoundException;
 import com.practice.shareitzeinolla.exception.ValidationException;
 import com.practice.shareitzeinolla.item.dto.CommentMapper;
@@ -170,6 +169,31 @@ public class ItemServiceTest {
                 NotFoundException.class,
                 () -> itemService.update(updatedItem, 1L, notExistingId)
         );
+
+        Assertions.assertEquals(expectedMessage, exception.getMessage());
+    }
+
+    @Test
+    void updateItem_shouldThrowException_whenFieldsAreNull() {
+        String expectedMessage = "Все поля не могут быть пустыми.";
+
+        User user = new User("IServiceTestUpdate1", "iservice1@update.com");
+        user.setId(1L);
+        Mockito.when(userRepository.findById(Mockito.anyLong()))
+                .thenReturn(Optional.of(user));
+
+        Item item = new Item("IServiceTestUpdate1", "IServiceTestUpdate1", true);
+        item.setUser(user);
+        item.setId(1L);
+        Mockito.when(itemRepository.findById(Mockito.anyLong()))
+                .thenReturn(Optional.of(item));
+
+        Item updatedItem = new Item(null, null, null);
+        updatedItem.setUser(null);
+
+        final ValidationException exception = Assertions.assertThrows(
+                ValidationException.class,
+                () -> itemService.update(updatedItem, item.getId(), user.getId()));
 
         Assertions.assertEquals(expectedMessage, exception.getMessage());
     }

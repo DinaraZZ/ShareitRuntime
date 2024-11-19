@@ -52,7 +52,6 @@ public class BookingJpaService {
                         item.getId(), booking.getFromDate(), booking.getToDate())
                 .orElse(null);
 
-        System.out.println(itemAlreadyBooked);
         if (itemAlreadyBooked == null) {
             booking.setUser(user);
             booking.setStatus(BookingStatus.WAITING);
