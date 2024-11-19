@@ -22,6 +22,13 @@ public class Booking {
         this.toDate = toDate;
     }
 
+    public Booking(User user, Item item, LocalDateTime fromDate, LocalDateTime toDate) {
+        this.user = user;
+        this.item = item;
+        this.fromDate = fromDate;
+        this.toDate = toDate;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")

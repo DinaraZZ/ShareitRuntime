@@ -169,7 +169,6 @@ public class UserServiceTest {
 
     @Test
     void deleteByIdUser_shouldDelete_whenUserExists() {
-        User user = new User("ServiceTestDelete", "service1@deletebyid.com");
         Long existingId = 1L;
 
         Mockito.doNothing().when(userRepository).deleteById(existingId);
