@@ -71,7 +71,7 @@ public class ItemMapper {
 
     public void merge(Item existingItem, Item updatedItem) {
         if (updatedItem.getName() == null && updatedItem.getDescription() == null &&
-                updatedItem.getAvailable() == null/* && updatedItem.getUser() == null*/) {
+                updatedItem.getAvailable() == null) {
             throw new ValidationException("Все поля не могут быть пустыми.");
         }
         if (updatedItem.getName() != null) {
@@ -83,8 +83,6 @@ public class ItemMapper {
         if (updatedItem.getAvailable() != null) {
             existingItem.setAvailable(updatedItem.getAvailable());
         }
-        if (updatedItem.getUser() != null) {
-            existingItem.setUser(updatedItem.getUser());
-        }
+        existingItem.setUser(updatedItem.getUser());
     }
 }

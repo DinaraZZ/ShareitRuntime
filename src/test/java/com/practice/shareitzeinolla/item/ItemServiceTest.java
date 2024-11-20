@@ -199,6 +199,63 @@ public class ItemServiceTest {
     }
 
     @Test
+    void updateItem_shouldNotThrowException_whenNameIsNull() {
+        User user = new User("IServiceTestUpdate5", "iservice5@update.com");
+        user.setId(1L);
+        Mockito.when(userRepository.findById(Mockito.anyLong()))
+                .thenReturn(Optional.of(user));
+
+        Item item = new Item("IServiceTestUpdate5", "IServiceTestUpdate5", true);
+        item.setUser(user);
+        item.setId(1L);
+        Mockito.when(itemRepository.findById(Mockito.anyLong()))
+                .thenReturn(Optional.of(item));
+
+        Item updatedItem = new Item(null, "IServiceTestUpdate6", false);
+
+        Assertions.assertDoesNotThrow(
+                () -> itemService.update(updatedItem, item.getId(), user.getId()));
+    }
+
+    @Test
+    void updateItem_shouldNotThrowException_whenDescriptionIsNull() {
+        User user = new User("IServiceTestUpdate6", "iservice6@update.com");
+        user.setId(1L);
+        Mockito.when(userRepository.findById(Mockito.anyLong()))
+                .thenReturn(Optional.of(user));
+
+        Item item = new Item("IServiceTestUpdate6", "IServiceTestUpdate6", true);
+        item.setUser(user);
+        item.setId(1L);
+        Mockito.when(itemRepository.findById(Mockito.anyLong()))
+                .thenReturn(Optional.of(item));
+
+        Item updatedItem = new Item("IServiceTestUpdate7", null, false);
+
+        Assertions.assertDoesNotThrow(
+                () -> itemService.update(updatedItem, item.getId(), user.getId()));
+    }
+
+    @Test
+    void updateItem_shouldNotThrowException_whenAvailableIsNull() {
+        User user = new User("IServiceTestUpdate7", "iservice7@update.com");
+        user.setId(1L);
+        Mockito.when(userRepository.findById(Mockito.anyLong()))
+                .thenReturn(Optional.of(user));
+
+        Item item = new Item("IServiceTestUpdate7", "IServiceTestUpdate7", true);
+        item.setUser(user);
+        item.setId(1L);
+        Mockito.when(itemRepository.findById(Mockito.anyLong()))
+                .thenReturn(Optional.of(item));
+
+        Item updatedItem = new Item("IServiceTestUpdate8", "IServiceTestUpdate8", null);
+
+        Assertions.assertDoesNotThrow(
+                () -> itemService.update(updatedItem, item.getId(), user.getId()));
+    }
+
+    @Test
     void findById_shouldFind_whenItemExists() {
         Item item = new Item("IServiceTestFind1", "IServiceTestFind1", true);
         Mockito.when(itemRepository.findById(Mockito.anyLong()))
@@ -288,8 +345,34 @@ public class ItemServiceTest {
     }
 
     @Test
+    void search_shouldNotReturnItems_whenAvailableIsFalse() {
+        Item availableItem = new Item(
+                "IServiceTestSearch4", "IServiceTestSearch4", true);
+        Item unavailableItem = new Item(
+                "IServiceTestSearch5", "IServiceTestSearch5", false);
+
+        List<Item> items = List.of(availableItem, unavailableItem);
+        Mockito.when(itemRepository.findAll())
+                .thenReturn(items);
+
+        List<Item> result = itemService.search("TestSearch", 0, 10);
+
+        Assertions.assertEquals(1, result.size());
+        Assertions.assertTrue(result.contains(availableItem));
+        Assertions.assertFalse(result.contains(unavailableItem));
+    }
+
+
+    @Test
     void search_shouldNotReturn_whenTextIsEmpty() {
         List<Item> result = itemService.search("", 0, 10);
+
+        Assertions.assertTrue(result.isEmpty());
+    }
+
+    @Test
+    void search_shouldNotReturn_whenTextIsNull() {
+        List<Item> result = itemService.search(null, 0, 10);
 
         Assertions.assertTrue(result.isEmpty());
     }

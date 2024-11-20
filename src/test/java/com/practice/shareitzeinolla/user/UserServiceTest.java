@@ -138,6 +138,37 @@ public class UserServiceTest {
     }
 
     @Test
+    void updateUser_shouldNotThrowException_whenEmailIsNull() {
+        Long existingId = 1L;
+        User existingUser = new User("ServiceTestUpdate5", "service5@update.com");
+        existingUser.setId(existingId);
+
+        User updatedUser = new User("ServiceTestUpdate6", null);
+
+        Mockito.when(userRepository.findById(existingId))
+                .thenReturn(Optional.of(existingUser));
+
+        Assertions.assertDoesNotThrow(
+                () -> userService.update(updatedUser, existingId));
+    }
+
+    @Test
+    void updateUser_shouldNotThrowException_whenNameIsNull() {
+        Long existingId = 1L;
+        User existingUser = new User("ServiceTestUpdate6", "service6@update.com");
+        existingUser.setId(existingId);
+
+        User updatedUser = new User(null, "service7@update.com");
+
+        Mockito.when(userRepository.findById(existingId))
+                .thenReturn(Optional.of(existingUser));
+
+        Assertions.assertDoesNotThrow(
+                () -> userService.update(updatedUser, existingId));
+    }
+
+
+    @Test
     void findByIdUser_shouldFind_whenUserExists() {
         User user = new User("ServiceTestFindById", "service1@findbyid.com");
         Long existingId = 1L;

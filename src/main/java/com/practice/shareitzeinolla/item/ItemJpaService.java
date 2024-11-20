@@ -70,7 +70,9 @@ public class ItemJpaService {
     public List<Item> search(String text, Integer fromIndex, Integer size) {
 //        Pageable pageable = PageRequest.of(fromIndex / size, size);
 
-        if (text == null || text.isEmpty()) return Collections.emptyList();
+        if (text == null || text.isEmpty()) {
+            return Collections.emptyList();
+        }
         return itemRepository.findAll().stream()
                 .filter(item ->
                         (item.getName().toLowerCase().contains(text.toLowerCase()) |

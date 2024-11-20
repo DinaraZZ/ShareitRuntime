@@ -2,7 +2,10 @@ package com.practice.shareitzeinolla.request;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.JsonPath;
+import com.practice.shareitzeinolla.item.dto.ItemCreateDto;
 import com.practice.shareitzeinolla.user.User;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
 import lombok.SneakyThrows;
 import org.hamcrest.Matchers;
@@ -61,6 +64,40 @@ public class RequestControllerTest {
 
         perform.andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.description").value("RControllerTestFindById1"));
+    }
+
+    @PersistenceContext
+    private EntityManager entityManager;
+    @Test
+    @SneakyThrows
+    void requestFindById_shouldFind_whenItemsExist() {
+        // POST
+        Request request = new Request("RControllerTestFindById2");
+        String jsonRequest = objectMapper.writeValueAsString(request);
+        ResultActions postRequest = mockMvc.perform(MockMvcRequestBuilders.post("/requests")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(jsonRequest)
+                .header(USER_HEADER, userId));
+        String requestIdJson = postRequest.andReturn().getResponse().getContentAsString();
+        Long idRequest = ((Integer) JsonPath.read(requestIdJson, "$.id")).longValue();
+
+        ItemCreateDto item = new ItemCreateDto(
+                "RControllerTestFindById2", "RControllerTestFindById2", true, idRequest);
+        String jsonItem = objectMapper.writeValueAsString(item);
+        mockMvc.perform(MockMvcRequestBuilders.post("/items")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(jsonItem)
+                .header(USER_HEADER, userId));
+
+        entityManager.flush(); // Принудительное сохранение
+        entityManager.clear(); // Очистка кэша сессии
+
+        // GET request
+        ResultActions perform = mockMvc.perform(MockMvcRequestBuilders.get("/requests/" + idRequest));
+
+        perform.andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.description").value("RControllerTestFindById2"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.items[0].name").value("RControllerTestFindById2"));
     }
 
     @Test

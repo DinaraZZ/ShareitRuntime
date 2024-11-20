@@ -3,7 +3,11 @@ package com.practice.shareitzeinolla.item;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.JsonPath;
 import com.practice.shareitzeinolla.booking.dto.BookingCreateDto;
+import com.practice.shareitzeinolla.item.dto.ItemCreateDto;
+import com.practice.shareitzeinolla.request.Request;
 import com.practice.shareitzeinolla.user.User;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
 import lombok.SneakyThrows;
 import org.hamcrest.Matchers;
@@ -66,6 +70,24 @@ public class ItemControllerTest {
 
     @Test
     @SneakyThrows
+    void itemCreate_shouldThrow_whenRequestDoesNotExist() {
+        long notExistingId = 100L;
+        String expectedMessage = "Запрос не найден.";
+
+        ItemCreateDto item = new ItemCreateDto("IControllerTestCreate2", "IControllerTestCreate2", true, notExistingId);
+        String jsonItem = objectMapper.writeValueAsString(item);
+
+        ResultActions perform = mockMvc.perform(MockMvcRequestBuilders.post("/items")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(jsonItem)
+                .header(USER_HEADER, userId));
+
+        perform.andExpect(MockMvcResultMatchers.status().isNotFound())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.description").value(expectedMessage));
+    }
+
+    @Test
+    @SneakyThrows
     void itemUpdate_shouldUpdate_whenItemExists() {
         // POST item
         Item item = new Item("IControllerTestUpdate1", "IControllerTestUpdate1", true);
@@ -115,6 +137,57 @@ public class ItemControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.name", Matchers.equalTo("IControllerTestFindById")))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.description", Matchers.equalTo("IControllerTestFindById")))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.available", Matchers.equalTo(true)));
+    }
+
+    @PersistenceContext
+    private EntityManager entityManager;
+
+    @Test
+    @SneakyThrows
+    void itemFindById_shouldFind_whenCommentsExist() {
+        // POST item
+        Item item = new Item("IControllerTestFindById2", "IControllerTestFindById2", true);
+        String postJson = objectMapper.writeValueAsString(item);
+        ResultActions postResult = mockMvc.perform(MockMvcRequestBuilders.post("/items")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(postJson)
+                .header(USER_HEADER, userId)
+                .header(USER_HEADER, userId));
+        String itemIdJson = postResult.andReturn().getResponse().getContentAsString();
+        Long itemId = ((Integer) JsonPath.read(itemIdJson, "$.id")).longValue();
+
+        // POST booking
+        BookingCreateDto booking = new BookingCreateDto(itemId,
+                LocalDateTime.now().minusHours(2), LocalDateTime.now().plusSeconds(1));
+        String postBookingJson = objectMapper.writeValueAsString(booking);
+        mockMvc.perform(MockMvcRequestBuilders.post("/bookings")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(postBookingJson)
+                .header(USER_HEADER, userId));
+
+        // comment
+        Comment comment = new Comment("IControllerTestFindByIdText");
+        String commentJson = objectMapper.writeValueAsString(comment);
+
+        // Ожидание окончания бронирования
+        Thread.sleep(1100);
+
+        // POST comment
+        mockMvc.perform(MockMvcRequestBuilders.post("/items/" + itemId + "/comment")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(commentJson)
+                .header(USER_HEADER, userId));
+
+        entityManager.flush(); // Принудительное сохранение
+        entityManager.clear(); // Очистка кэша сессии
+
+        // GET item
+        ResultActions perform = mockMvc.perform(MockMvcRequestBuilders.get("/items/" + itemId));
+        perform.andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.name", Matchers.equalTo("IControllerTestFindById2")))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.description", Matchers.equalTo("IControllerTestFindById2")))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.available", Matchers.equalTo(true)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.comments[0].text", Matchers.equalTo("IControllerTestFindByIdText")));
     }
 
     @Test

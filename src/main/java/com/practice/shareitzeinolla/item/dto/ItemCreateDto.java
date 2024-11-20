@@ -7,6 +7,16 @@ import lombok.Data;
 
 @Data
 public class ItemCreateDto {
+    public ItemCreateDto() {
+    }
+
+    public ItemCreateDto(String name, String description, Boolean available, Long requestId) {
+        this.name = name;
+        this.description = description;
+        this.available = available;
+        this.requestId = requestId;
+    }
+
     @NotBlank(message = "Название товара не может быть пустым")
     private String name;
 
