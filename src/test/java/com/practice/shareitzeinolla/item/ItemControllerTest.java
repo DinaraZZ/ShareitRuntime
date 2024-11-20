@@ -141,7 +141,6 @@ public class ItemControllerTest {
 
     @PersistenceContext
     private EntityManager entityManager;
-
     @Test
     @SneakyThrows
     void itemFindById_shouldFind_whenCommentsExist() {
