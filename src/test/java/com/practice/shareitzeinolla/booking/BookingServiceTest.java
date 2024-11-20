@@ -380,23 +380,21 @@ public class BookingServiceTest {
 
     @Test
     @Tag("requiresUser")
-    void findById_shouldNotFind_whenUserDoesNotMatch() {
+    @Tag("requiresOwner")
+    void findById_shouldNotFind_whenUserAndOwnerDoNotMatch() {
         String expectedMessage = "У данного пользователя нет доступа к этому бронированию.";
         long notExistingId = 100L;
 
         Mockito.when(userRepository.findById(Mockito.anyLong()))
                 .thenReturn(Optional.of(user));
 
-        User secondUser = new User("BServiceTestCreate2", "bservice2@create.com");
-        secondUser.setId(1L);
-
-        Booking booking = new Booking(secondUser, item,
+        Booking booking = new Booking(owner, item,
                 LocalDateTime.now().plusHours(1), LocalDateTime.now().plusHours(2));
         booking.setId(1L);
         Mockito.when(bookingRepository.findById(Mockito.anyLong()))
                 .thenReturn(Optional.of(booking));
 
-        item.setUser(secondUser);
+        item.setUser(owner);
 
         final ValidationException exception = Assertions.assertThrows(
                 ValidationException.class,
@@ -404,6 +402,28 @@ public class BookingServiceTest {
         );
 
         Assertions.assertEquals(expectedMessage, exception.getMessage());
+    }
+
+    @Test
+    @Tag("requiresUser")
+    @Tag("requiresOwner")
+    void findById_shouldReturn_whenItemUserMatches() {
+        Mockito.when(userRepository.findById(Mockito.anyLong()))
+                .thenReturn(Optional.of(user));
+
+        Booking booking = new Booking(owner, item,
+                LocalDateTime.now().plusHours(1), LocalDateTime.now().plusHours(2));
+        booking.setId(1L);
+        Mockito.when(bookingRepository.findById(Mockito.anyLong()))
+                .thenReturn(Optional.of(booking));
+
+        item.setUser(user);
+
+        Booking result = bookingService.findById(booking.getId(), user.getId());
+
+        Assertions.assertNotNull(result);
+        Assertions.assertEquals(booking.getUser().getId(), result.getUser().getId());
+        Assertions.assertEquals(booking.getItem().getId(), result.getItem().getId());
     }
 
     @Test
@@ -545,6 +565,17 @@ public class BookingServiceTest {
         );
 
         Assertions.assertEquals(expectedMessage, exception.getMessage());
+    }
+
+    @Test
+    @Tag("requiresUser")
+    void findAllByUserDefault_shouldReturnEmpty_whenStateDoesNotExist() {
+        Mockito.when(userRepository.findById(Mockito.anyLong()))
+                .thenReturn(Optional.of(user));
+
+        List<Booking> result = bookingService.findAllByUser(user.getId(), "-", 0, 10);
+
+        Assertions.assertTrue(result.isEmpty());
     }
 
     @Test
@@ -707,5 +738,17 @@ public class BookingServiceTest {
         );
 
         Assertions.assertEquals(expectedMessage, exception.getMessage());
+    }
+
+    @Test
+    @Tag("requiresUser")
+    @Tag("requiresOwner")
+    void findAllByOwnerDefault_shouldReturnEmpty_whenStateDoesNotExist() {
+        Mockito.when(userRepository.findById(Mockito.anyLong()))
+                .thenReturn(Optional.of(user));
+
+        List<Booking> result = bookingService.findAllByOwner(owner.getId(), "-", 0, 10);
+
+        Assertions.assertTrue(result.isEmpty());
     }
 }
