@@ -167,7 +167,6 @@ public class UserServiceTest {
                 () -> userService.update(updatedUser, existingId));
     }
 
-
     @Test
     void findByIdUser_shouldFind_whenUserExists() {
         User user = new User("ServiceTestFindById", "service1@findbyid.com");
