@@ -3,9 +3,9 @@ package com.practice.shareitzeinolla.item;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.JsonPath;
 import com.practice.shareitzeinolla.booking.dto.BookingCreateDto;
+import com.practice.shareitzeinolla.item.dto.CommentCreateDto;
 import com.practice.shareitzeinolla.item.dto.ItemCreateDto;
-import com.practice.shareitzeinolla.request.Request;
-import com.practice.shareitzeinolla.user.User;
+import com.practice.shareitzeinolla.user.dto.UserCreateDto;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
@@ -41,7 +41,7 @@ public class ItemControllerTest {
 
     @BeforeEach
     void createUser() throws Exception {
-        User user = new User("IControllerTest", "icontroller@test.com");
+        UserCreateDto user = new UserCreateDto("IControllerTest", "icontroller@test.com");
         String jsonUser = objectMapper.writeValueAsString(user);
         ResultActions postUser = mockMvc.perform(MockMvcRequestBuilders.post("/users")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -54,7 +54,7 @@ public class ItemControllerTest {
     @Test
     @SneakyThrows
     void itemCreate_shouldCreate_whenItemCorrect() {
-        Item item = new Item("IControllerTestCreate1", "IControllerTestCreate1", true);
+        ItemCreateDto item = new ItemCreateDto("IControllerTestCreate1", "IControllerTestCreate1", true);
         String jsonItem = objectMapper.writeValueAsString(item);
 
         ResultActions perform = mockMvc.perform(MockMvcRequestBuilders.post("/items")
@@ -90,7 +90,7 @@ public class ItemControllerTest {
     @SneakyThrows
     void itemUpdate_shouldUpdate_whenItemExists() {
         // POST item
-        Item item = new Item("IControllerTestUpdate1", "IControllerTestUpdate1", true);
+        ItemCreateDto item = new ItemCreateDto("IControllerTestUpdate1", "IControllerTestUpdate1", true);
         String postJson = objectMapper.writeValueAsString(item);
         ResultActions postResult = mockMvc.perform(MockMvcRequestBuilders.post("/items")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -100,7 +100,7 @@ public class ItemControllerTest {
         Long itemId = ((Integer) JsonPath.read(itemIdJson, "$.id")).longValue();
 
         // PATCH item
-        Item updatedItem = new Item();
+        ItemCreateDto updatedItem = new ItemCreateDto();
         updatedItem.setName("IControllerTestUpdate2");
         String patchJson = objectMapper.writeValueAsString(updatedItem);
         ResultActions patchResult = mockMvc.perform(MockMvcRequestBuilders.patch("/items/" + itemId)
@@ -121,7 +121,7 @@ public class ItemControllerTest {
     @SneakyThrows
     void itemFindById_shouldFind_whenItemExists() {
         // POST item
-        Item item = new Item("IControllerTestFindById", "IControllerTestFindById", true);
+        ItemCreateDto item = new ItemCreateDto("IControllerTestFindById", "IControllerTestFindById", true);
         String postJson = objectMapper.writeValueAsString(item);
         ResultActions postResult = mockMvc.perform(MockMvcRequestBuilders.post("/items")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -145,7 +145,7 @@ public class ItemControllerTest {
     @SneakyThrows
     void itemFindById_shouldFind_whenCommentsExist() {
         // POST item
-        Item item = new Item("IControllerTestFindById2", "IControllerTestFindById2", true);
+        ItemCreateDto item = new ItemCreateDto("IControllerTestFindById2", "IControllerTestFindById2", true);
         String postJson = objectMapper.writeValueAsString(item);
         ResultActions postResult = mockMvc.perform(MockMvcRequestBuilders.post("/items")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -165,7 +165,7 @@ public class ItemControllerTest {
                 .header(USER_HEADER, userId));
 
         // comment
-        Comment comment = new Comment("IControllerTestFindByIdText");
+        CommentCreateDto comment = new CommentCreateDto("IControllerTestFindByIdText");
         String commentJson = objectMapper.writeValueAsString(comment);
 
         // Ожидание окончания бронирования
@@ -193,12 +193,12 @@ public class ItemControllerTest {
     @SneakyThrows
     void itemFindAll_shouldReturn_whenItemsExist() {
         // POST items
-        List<Item> items = List.of(
-                new Item("IControllerTestFindAll1", "IControllerTestFindAll1", true),
-                new Item("IControllerTestFindAll2", "IControllerTestFindAll2", true),
-                new Item("IControllerTestFindAll3", "IControllerTestFindAll3", true)
+        List<ItemCreateDto> items = List.of(
+                new ItemCreateDto("IControllerTestFindAll1", "IControllerTestFindAll1", true),
+                new ItemCreateDto("IControllerTestFindAll2", "IControllerTestFindAll2", true),
+                new ItemCreateDto("IControllerTestFindAll3", "IControllerTestFindAll3", true)
         );
-        for (Item item : items) {
+        for (ItemCreateDto item : items) {
             String postJson = objectMapper.writeValueAsString(item);
             mockMvc.perform(MockMvcRequestBuilders.post("/items")
                     .contentType(MediaType.APPLICATION_JSON)
@@ -220,7 +220,7 @@ public class ItemControllerTest {
     @SneakyThrows
     void itemDeleteById_shouldDelete_ifItemExists() {
         // POST item
-        Item item = new Item("IControllerTestDeleteById", "IControllerTestDeleteById", true);
+        ItemCreateDto item = new ItemCreateDto("IControllerTestDeleteById", "IControllerTestDeleteById", true);
         String postJson = objectMapper.writeValueAsString(item);
         ResultActions postResult = mockMvc.perform(MockMvcRequestBuilders.post("/items")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -243,12 +243,12 @@ public class ItemControllerTest {
     @SneakyThrows
     void itemSearch_shouldReturn_whenItemsExist() {
         // POST items
-        List<Item> items = List.of(
-                new Item("IControllerTestSearch1", "IControllerTestSearch1", true),
-                new Item("IControllerTestSearch2", "IControllerTestSearch2", true),
-                new Item("IControllerTestSearch3", "IControllerTestSearch3", true)
+        List<ItemCreateDto> items = List.of(
+                new ItemCreateDto("IControllerTestSearch1", "IControllerTestSearch1", true),
+                new ItemCreateDto("IControllerTestSearch2", "IControllerTestSearch2", true),
+                new ItemCreateDto("IControllerTestSearch3", "IControllerTestSearch3", true)
         );
-        for (Item item : items) {
+        for (ItemCreateDto item : items) {
             String postJson = objectMapper.writeValueAsString(item);
             mockMvc.perform(MockMvcRequestBuilders.post("/items")
                     .contentType(MediaType.APPLICATION_JSON)
@@ -267,7 +267,7 @@ public class ItemControllerTest {
     @SneakyThrows
     void itemAddCommentary_shouldReturn_whenItemExist() {
         // POST item
-        Item item = new Item("IControllerTestAddCommentary", "IControllerTestAddCommentary", true);
+        ItemCreateDto item = new ItemCreateDto("IControllerTestAddCommentary", "IControllerTestAddCommentary", true);
         String postItemJson = objectMapper.writeValueAsString(item);
         ResultActions postItemResult = mockMvc.perform(MockMvcRequestBuilders.post("/items")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -285,7 +285,7 @@ public class ItemControllerTest {
                 .header(USER_HEADER, userId));
 
         // comment
-        Comment comment = new Comment("IControllerTestAddCommentaryText");
+        CommentCreateDto comment = new CommentCreateDto("IControllerTestAddCommentaryText");
         String commentJson = objectMapper.writeValueAsString(comment);
 
         // Ожидание окончания бронирования

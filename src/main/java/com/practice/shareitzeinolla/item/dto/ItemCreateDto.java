@@ -10,6 +10,12 @@ public class ItemCreateDto {
     public ItemCreateDto() {
     }
 
+    public ItemCreateDto(String name, String description, Boolean available) {
+        this.name = name;
+        this.description = description;
+        this.available = available;
+    }
+
     public ItemCreateDto(String name, String description, Boolean available, Long requestId) {
         this.name = name;
         this.description = description;
