@@ -5,8 +5,6 @@ import com.jayway.jsonpath.JsonPath;
 import com.practice.shareitzeinolla.item.dto.ItemCreateDto;
 import com.practice.shareitzeinolla.request.dto.RequestCreateDto;
 import com.practice.shareitzeinolla.user.dto.UserCreateDto;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
 import lombok.SneakyThrows;
 import org.hamcrest.Matchers;
@@ -67,8 +65,8 @@ public class RequestControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.description").value("RControllerTestFindById1"));
     }
 
-    @PersistenceContext
-    private EntityManager entityManager;
+    /*@PersistenceContext
+    private EntityManager entityManager;*/
     @Test
     @SneakyThrows
     void requestFindById_shouldFind_whenItemsExist() {
@@ -90,8 +88,8 @@ public class RequestControllerTest {
                 .content(jsonItem)
                 .header(USER_HEADER, userId));
 
-        entityManager.flush(); // Принудительное сохранение
-        entityManager.clear(); // Очистка кэша сессии
+//        entityManager.flush(); // Принудительное сохранение
+//        entityManager.clear(); // Очистка кэша сессии
 
         // GET request
         ResultActions perform = mockMvc.perform(MockMvcRequestBuilders.get("/requests/" + idRequest));

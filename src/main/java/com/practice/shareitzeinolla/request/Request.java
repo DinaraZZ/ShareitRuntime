@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -39,5 +40,5 @@ public class Request {
 
     @OneToMany(mappedBy = "request")
     @JsonIgnore
-    private List<Item> items;
+    private List<Item> items = new ArrayList<>();
 }

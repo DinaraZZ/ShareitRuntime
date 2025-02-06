@@ -31,6 +31,7 @@ public class ItemMapper {
             Request request = requestRepository.findById(itemCreateDto.getRequestId())
                     .orElseThrow(() -> new NotFoundException("Запрос не найден."));
             item.setRequest(request);
+            request.getItems().add(item);
         }
 
         return item;
