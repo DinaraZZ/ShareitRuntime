@@ -6,6 +6,13 @@ import lombok.Data;
 
 @Data
 public class RequestCreateDto {
+    public RequestCreateDto() {
+    }
+
+    public RequestCreateDto(String description) {
+        this.description = description;
+    }
+
     @NotNull(message = "Описание не может быть пустым")
     @NotBlank(message = "Описание не может быть пустым")
     private String description;

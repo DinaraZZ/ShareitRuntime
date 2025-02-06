@@ -3,7 +3,8 @@ package com.practice.shareitzeinolla.request;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.JsonPath;
 import com.practice.shareitzeinolla.item.dto.ItemCreateDto;
-import com.practice.shareitzeinolla.user.User;
+import com.practice.shareitzeinolla.request.dto.RequestCreateDto;
+import com.practice.shareitzeinolla.user.dto.UserCreateDto;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
@@ -11,7 +12,6 @@ import lombok.SneakyThrows;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
@@ -38,7 +38,7 @@ public class RequestControllerTest {
 
     @BeforeEach
     void createUser() throws Exception {
-        User user = new User("RControllerTest", "rcontroller@test.com");
+        UserCreateDto user = new UserCreateDto("RControllerTest", "rcontroller@test.com");
         String jsonUser = objectMapper.writeValueAsString(user);
         ResultActions postUser = mockMvc.perform(MockMvcRequestBuilders.post("/users")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -51,7 +51,7 @@ public class RequestControllerTest {
     @SneakyThrows
     void requestFindById_shouldReturn_whenRequestExists() {
         // POST request
-        Request request = new Request("RControllerTestFindById1");
+        RequestCreateDto request = new RequestCreateDto("RControllerTestFindById1");
         String jsonRequest = objectMapper.writeValueAsString(request);
         ResultActions postRequest = mockMvc.perform(MockMvcRequestBuilders.post("/requests")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -73,7 +73,7 @@ public class RequestControllerTest {
     @SneakyThrows
     void requestFindById_shouldFind_whenItemsExist() {
         // POST
-        Request request = new Request("RControllerTestFindById2");
+        RequestCreateDto request = new RequestCreateDto("RControllerTestFindById2");
         String jsonRequest = objectMapper.writeValueAsString(request);
         ResultActions postRequest = mockMvc.perform(MockMvcRequestBuilders.post("/requests")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -104,7 +104,7 @@ public class RequestControllerTest {
     @Test
     @SneakyThrows
     void requestCreate_shouldCreate_whenRequestCorrect() {
-        Request request = new Request("RControllerTestCreate1");
+        RequestCreateDto request = new RequestCreateDto("RControllerTestCreate1");
         String jsonRequest = objectMapper.writeValueAsString(request);
         ResultActions perform = mockMvc.perform(MockMvcRequestBuilders.post("/requests")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -119,12 +119,12 @@ public class RequestControllerTest {
     @SneakyThrows
     void requestFindAll_shouldReturn_whenRequestExists() {
         // POST requests
-        List<Request> requests = List.of(
-                new Request("RControllerTestFindAll1"),
-                new Request("RControllerTestFindAll2"),
-                new Request("RControllerTestFindAll3")
+        List<RequestCreateDto> requests = List.of(
+                new RequestCreateDto("RControllerTestFindAll1"),
+                new RequestCreateDto("RControllerTestFindAll2"),
+                new RequestCreateDto("RControllerTestFindAll3")
         );
-        for (Request request : requests) {
+        for (RequestCreateDto request : requests) {
             String jsonRequest = objectMapper.writeValueAsString(request);
             mockMvc.perform(MockMvcRequestBuilders.post("/requests")
                     .contentType(MediaType.APPLICATION_JSON)
@@ -147,7 +147,7 @@ public class RequestControllerTest {
     @SneakyThrows
     void requestFindAllOtherUsers_shouldReturn_whenRequestsExists() {
         // POST other user
-        User user = new User("RControllerTestFindAllOtherUsers", "rcontroller@findallotherusers.com");
+        UserCreateDto user = new UserCreateDto("RControllerTestFindAllOtherUsers", "rcontroller@findallotherusers.com");
         String jsonUser = objectMapper.writeValueAsString(user);
         ResultActions postUser = mockMvc.perform(MockMvcRequestBuilders.post("/users")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -156,10 +156,10 @@ public class RequestControllerTest {
         Long otherUserId = ((Integer) JsonPath.read(userIdJson, "$.id")).longValue();
 
         // POST requests
-        List<Request> requests = List.of(
-                new Request("RControllerTestFindAll1"),
-                new Request("RControllerTestFindAll2"),
-                new Request("RControllerTestFindAll3")
+        List<RequestCreateDto> requests = List.of(
+                new RequestCreateDto("RControllerTestFindAll1"),
+                new RequestCreateDto("RControllerTestFindAll2"),
+                new RequestCreateDto("RControllerTestFindAll3")
         );
         for (int i = 0; i < requests.size() - 1; i++) {
             String jsonRequest = objectMapper.writeValueAsString(requests.get(i));
