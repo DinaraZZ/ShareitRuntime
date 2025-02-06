@@ -2,6 +2,7 @@ package com.practice.shareitzeinolla.user;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.JsonPath;
+import com.practice.shareitzeinolla.user.dto.UserCreateDto;
 import jakarta.transaction.Transactional;
 import lombok.SneakyThrows;
 import org.hamcrest.Matchers;
@@ -28,7 +29,7 @@ public class UserControllerTest {
     @Transactional
     void userFindById_shouldReturnUser_whenUserExists() {
         // POST user
-        User user = new User("ControllerTestFindById", "controller1@findbyid.com");
+        UserCreateDto user = new UserCreateDto("ControllerTestFindById", "controller1@findbyid.com");
 
         ObjectMapper objectMapper = new ObjectMapper();
         String json = objectMapper.writeValueAsString(user);
@@ -52,7 +53,7 @@ public class UserControllerTest {
     @SneakyThrows
     @Transactional
     void userCreate_shouldCreateUser_whenUserCorrect() {
-        User user = new User("ControllerTestCreate", "controller1@create.com");
+        UserCreateDto user = new UserCreateDto("ControllerTestCreate", "controller1@create.com");
 
         ObjectMapper objectMapper = new ObjectMapper();
         String json = objectMapper.writeValueAsString(user);
@@ -68,15 +69,15 @@ public class UserControllerTest {
     @Transactional
     void userFindAll_shouldFindAll_whenUsersExist() {
         // POST users
-        List<User> users = List.of(
-                new User("ControllerTestFindAll1", "controller1@findall.com"),
-                new User("ControllerTestFindAll2", "controller2@findall.com"),
-                new User("ControllerTestFindAll3", "controller3@findall.com"),
-                new User("ControllerTestFindAll4", "controller4@findall.com")
+        List<UserCreateDto> users = List.of(
+                new UserCreateDto("ControllerTestFindAll1", "controller1@findall.com"),
+                new UserCreateDto("ControllerTestFindAll2", "controller2@findall.com"),
+                new UserCreateDto("ControllerTestFindAll3", "controller3@findall.com"),
+                new UserCreateDto("ControllerTestFindAll4", "controller4@findall.com")
         );
 
         ObjectMapper objectMapper = new ObjectMapper();
-        for (User user : users) {
+        for (UserCreateDto user : users) {
             String json = objectMapper.writeValueAsString(user);
             mockMvc.perform(MockMvcRequestBuilders.post("/users")
                     .contentType(MediaType.APPLICATION_JSON)
@@ -96,7 +97,7 @@ public class UserControllerTest {
     @Transactional
     void userDeleteById_shouldDeleteUser_whenUserExists() {
         // POST user
-        User user = new User("ControllerTestDeleteById", "controller1@deletebyid.com");
+        UserCreateDto user = new UserCreateDto("ControllerTestDeleteById", "controller1@deletebyid.com");
 
         ObjectMapper objectMapper = new ObjectMapper();
         String json = objectMapper.writeValueAsString(user);
@@ -121,7 +122,7 @@ public class UserControllerTest {
     @Transactional
     void userUpdate_shouldUpdateUser_whenUserExists() {
         // POST user
-        User user = new User("ControllerTestUpdate", "controller1@update.com");
+        UserCreateDto user = new UserCreateDto("ControllerTestUpdate", "controller1@update.com");
 
         ObjectMapper objectMapper = new ObjectMapper();
         String json = objectMapper.writeValueAsString(user);
@@ -133,7 +134,7 @@ public class UserControllerTest {
         Integer id = JsonPath.read(userIdJson, "$.id");
 
         // PATCH user
-        User updatedUser = new User();
+        UserCreateDto updatedUser = new UserCreateDto();
         updatedUser.setEmail("controller2@update.com");
         String patchJson = objectMapper.writeValueAsString(updatedUser);
 

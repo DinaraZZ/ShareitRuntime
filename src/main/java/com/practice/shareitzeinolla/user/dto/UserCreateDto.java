@@ -7,6 +7,14 @@ import lombok.Data;
 
 @Data
 public class UserCreateDto {
+    public UserCreateDto() {
+    }
+
+    public UserCreateDto(String name, String email) {
+        this.name = name;
+        this.email = email;
+    }
+
     @NotBlank(message = "Имя пользователя не может быть пустым")
     private String name;
 
