@@ -3,8 +3,8 @@ package com.practice.shareitzeinolla.booking;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.JsonPath;
 import com.practice.shareitzeinolla.booking.dto.BookingCreateDto;
-import com.practice.shareitzeinolla.item.Item;
-import com.practice.shareitzeinolla.user.User;
+import com.practice.shareitzeinolla.item.dto.ItemCreateDto;
+import com.practice.shareitzeinolla.user.dto.UserCreateDto;
 import jakarta.transaction.Transactional;
 import lombok.SneakyThrows;
 import org.hamcrest.Matchers;
@@ -63,7 +63,7 @@ public class BookingControllerTest {
     @BeforeEach
     void setUp(TestInfo testInfo) throws Exception {
         // create User
-        User user = new User("BControllerTestUser", "bcontrolleruser@test.com");
+        UserCreateDto user = new UserCreateDto("BControllerTestUser", "bcontrolleruser@test.com");
         String jsonUser = objectMapper.writeValueAsString(user);
         ResultActions postUser = mockMvc.perform(MockMvcRequestBuilders.post("/users")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -72,7 +72,7 @@ public class BookingControllerTest {
         userId = ((Integer) JsonPath.read(userIdJson, "$.id")).longValue();
 
         // create Item
-        Item item = new Item("BControllerTestItem", "BControllerTestItem", true);
+        ItemCreateDto item = new ItemCreateDto("BControllerTestItem", "BControllerTestItem", true);
         String jsonItem = objectMapper.writeValueAsString(item);
         ResultActions postItem = mockMvc.perform(MockMvcRequestBuilders.post("/items")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -98,7 +98,7 @@ public class BookingControllerTest {
         // create Bookings list
         if (testInfo.getTags().contains("requiresBookingsList")) {
             // second Owner
-            User secondUser = new User("BControllerTestUser2", "bcontrolleruser2@test.com");
+            UserCreateDto secondUser = new UserCreateDto("BControllerTestUser2", "bcontrolleruser2@test.com");
             String jsonSecondUser = objectMapper.writeValueAsString(secondUser);
             ResultActions postSecondUser = mockMvc.perform(MockMvcRequestBuilders.post("/users")
                     .contentType(MediaType.APPLICATION_JSON)
@@ -107,7 +107,7 @@ public class BookingControllerTest {
             Long secondUserId = ((Integer) JsonPath.read(secondUserIdJson, "$.id")).longValue();
 
             // second Item
-            Item secondItem = new Item("BControllerTestItem2", "BControllerTestItem2", true);
+            ItemCreateDto secondItem = new ItemCreateDto("BControllerTestItem2", "BControllerTestItem2", true);
             String jsonSecondItem = objectMapper.writeValueAsString(secondItem);
             ResultActions postSecondItem = mockMvc.perform(MockMvcRequestBuilders.post("/items")
                     .contentType(MediaType.APPLICATION_JSON)
